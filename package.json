@@ -1,24 +1,22 @@
 {
-  "name": "oa-nodejs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "oa",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www",
+    "test": "mocha -t 5000"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://AstrianZheng@bitbucket.org/AstrianZheng/oa-nodejs.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/AstrianZheng/oa-nodejs#readme",
   "dependencies": {
-    "debug": "^2.6.3",
-    "fs": "0.0.1-security",
-    "http": "0.0.0",
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-session": "^1.14.2",
+    "morgan": "~1.8.1",
     "mysql": "^2.13.0",
+    "pug": "~2.0.0-beta11",
     "request": "^2.81.0",
-    "sync_back": "^1.0.1"
+    "serve-favicon": "~2.4.2",
+    "sync_back": "^1.0.2"
   }
 }
