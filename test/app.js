@@ -1,19 +1,22 @@
 var assert = require('assert');
 var run = require('sync_back').run;
 var request = require('request');
+var debug = require('debug')('oa:test');
 
 var Url = 'http://127.0.0.1:3000/';
 var cookie = '';
 
-var post = function(url, data, back) {
-    request.post({
-        url: url,
-        form: JSON.stringify(data),
-        headers: {
+var post = function (url, data, back) {
+    request.defaults({
+        "headers": {
             'cookie': cookie
         }
-    }, function(err, data) {
-        var cookie = data.headers['set-cookie'][0]
+    }).post({
+        url: url,
+        form: JSON.stringify(data)
+    }, function (err, data) {
+        if (cookie == '')
+            cookie = data.headers['set-cookie'][0]
         if (err)
             back(err)
         data = data.body
@@ -21,17 +24,17 @@ var post = function(url, data, back) {
     });
 }
 
-describe('专案系统', function() {
-    it('登录', function(done) {
-        post(Url + 'api/login', {}, function(err, data) {
+describe('专案系统', function () {
+    it('登录', function (done) {
+        post(Url + 'api/login', {}, function (err, data) {
             if (err)
-                console.log(err)
+                debug(err)
 
             done()
         })
     })
-    it('新建专案模板', function(done) {
-        run(function*(api) {
+    it('新建专案模板', function (done) {
+        run(function* (api) {
             var data = yield post(Url + 'api/project/newtemplate', {
                 "title": "test",
                 "description": "测试",
@@ -57,8 +60,8 @@ describe('专案系统', function() {
                 }]
             }, api.next);
             if (api.err)
-                console.log(api.err)
-            console.log(data)
+                debug(api.err)
+            debug(data)
             assert(data.status == "Success");
 
             done();
