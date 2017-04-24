@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
-//var sql = require('../../modules/sql');
-var debug = require('debug')('oa:newtemplate');
+var debug = require('debug')('oa: api');
 var util = require('util')
 var Db = require('./modules/Db')
 var sync = require('sync_back').run
+var interface = {}
+interface.project = {} 
+interface.project.newtemplate = require('./api/project/newtemplate')
+interface.project.publishtemplate = require('./api/project/publishtemplate')
   /*            *
    * 用户登录    */
 router.post('/login', function (req, res, next) {
@@ -21,59 +24,17 @@ router.post('/login', function (req, res, next) {
   /*            *
    * 新建专案模板 */
 router.post('/project/newtemplate', function (req, res, next) {
-  debug('hello')
     var post = req.body
     run(req, res, {}, function (api) {
-      var back4Fail = api.back4Fail
-      var back4Success = api.back4Success
-      if (!post.title || post.title == '' || !post.description || post.description == '' || !post.form || !post.flow) return back4Fail(400, 0, "有必填项未填写。")
-      var flow = post.flow;
-      for (var i in flow) {
-        if (!flow[i] || flow[i] == '') return back4Fail(400, 3, "流程不完整。")
-        var conditionTOF = true
-        if (util.isArray(flow[i].condition)) {
-          debug('数组')
-          for (var k in flow[i].condition) {
-            if (false) { // 判断 condition 内元素是否正确
-              conditionTOF = false
-            }
-          }
-        }
-        else {
-          debug('字符串')
-          if (flow[i].condition != "other") conditionTOF = false
-        }
-        if (!conditionTOF) {
-          back4Fail(400, 4, "字段有错误。")
-          return;
-        }
-      }
-      var form = post.form
-      for (var j in form) {
-        if (!form[i] || form[i] == '') return back4Fail(400, 3, "流程不完整。")
-      }
-      // 缺权限检查、登录检查
-      if (!post.permission || post.permission == '') {
-        post.permission = 0
-      }
-      var sql = "INSERT INTO project_temple (标题, 描述, 表字段, 流程, 状态, 创建者, 创建时间) VALUES ('" + post.title + "', '" + post.description + "','" + JSON.stringify(post.form) + "', '" + JSON.stringify(post.flow) + "', 0, 0, "+new Date().getTime()+" )";
-      debug(sql)
-      Db.exec(sql, api.next)
-      back4Success(null)
+      interface.project.newtemplate(req, res, api, post)
     })
   })
   /*            *
    * 发布专案模板 */
-router.post('/project/newtemplate', function (req, res, next) {
+router.post('/project/publishtemplate', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {
-    var back4Fail = api.back4Fail
-    var back4Success = api.back4Success
-    if (!post.temid || post.temid == '')
-      return back4Fail(400, 0, "有必填项未填写。")
-    // 缺权限检查、登录检查
-    Db.exec("UPDATE project_temple SET 状态 = 1 WHERE id = "+post.temid)
-
+    interface.project.publishtemplate(req,res,api,post)
   })
 })
 
@@ -112,4 +73,4 @@ function run(req, res, opt, fun) {
     }
   })
 }
-module.exports = router;
+module.exports = router; 
