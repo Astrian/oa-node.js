@@ -32,6 +32,7 @@ router.post('/project/newtemplate', function (req, res, next) {
   /*            *
    * 发布专案模板 */
 router.post('/project/publishtemplate', function (req, res, next) {
+  debug('hello')
   var post = req.body
   run(req, res, {}, function (api) {
     interface.project.publishtemplate(req,res,api,post)
