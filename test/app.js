@@ -5,20 +5,21 @@ var debug = require('debug')('oa:test');
 var Url = 'http://127.0.0.1:3000/';
 var cookie = '';
 var post = function (url, data, back) {
-  request.defaults({
-    "headers": {
-      'cookie': cookie,
-      'Content-Type': 'application/json'
-    }
-  }).post({
+  request({
     url: url,
-    form: data
+    method: "POST",
+    json: true,
+    headers: {
+      'cookie': cookie,
+      "content-type": "application/json"
+    },
+    body: data
   }, function (err, data) {
     if (cookie == '') cookie = data.headers['set-cookie'][0]
     if (err) back(err)
     data = data.body
-    back(err, JSON.parse(data))
-  });
+    back(err, data)
+  })
 }
 describe('专案系统', function () {
   it('登录', function (done) {
@@ -58,6 +59,7 @@ describe('专案系统', function () {
       debug(data)
       assert(data.status == "Success");
       if (data.status == 'Success') temid = data.data.temid
+      debug(temid)
       done();
     })
   });

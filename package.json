@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "supervisor ./bin/www",
-    "test": "export DEBUG=\"oa:test\" && mocha -t 5000",
+    "test": "clear && export DEBUG=\"oa:test\" && mocha -t 5000",
     "debug": "export DEBUG=\"oa:*\" && supervisor ./bin/www"
   },
   "dependencies": {
