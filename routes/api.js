@@ -16,6 +16,8 @@ interface.project.newtemplate = require('./api/project/newtemplate')
 interface.project.publishtemplate = require('./api/project/publishtemplate')
 interface.project.newproject = require('./api/project/newproject')
 interface.user.newuser = require('./api/user/newuser')
+interface.user.recovery = require('./api/user/recovery')
+interface.user.confirmtoken = require('./api/user/confirmtoken')
   /*            *
    * 用户登录    */
 router.post('/login', function (req, res, next) {
@@ -52,6 +54,22 @@ router.post('/login', function (req, res, next) {
       })
     })
   })
+/*              *
+ * 重置动态验证码 */
+router.post('/user/recovery', function(req,res,next){
+  var post = req.body
+  run(req, res, {login: false}, function (api) {
+    interface.user.recovery(req, res, api, post)
+  })
+})
+/*               *
+ * 确认重置动态密钥 */
+router.post('/user/confirmtoken', function(req,res,next){
+  var post = req.body
+  run(req, res, {login: false}, function (api) {
+    interface.user.confirmtoken(req, res, api, post)
+  })
+})
   /*            *
    * 新建专案模板 */
 router.post('/project/newtemplate', function (req, res, next) {

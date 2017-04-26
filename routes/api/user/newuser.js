@@ -1,6 +1,7 @@
 var 调用数据库 = require('../../modules/Db').exec
 var 随机数生成器 = require('crypto-random-string')
 var 回调函数是一个反人类的东西 = require('sync_back').run
+var debug = require('debug')('oa:api/user/newuser');
 module.exports = function (req, res, api, post) {
   var 请求体 = req.body
   var 失败返回 = api.back4Fail
@@ -20,6 +21,7 @@ module.exports = function (req, res, api, post) {
     数据库结果 = yield 调用数据库(SQL语句, 回调值.next)
     if(数据库结果[0]) return 失败返回(400, 1, "用户名已被占用。")
     SQL语句 = 'SELECT * FROM node WHERE id = "'+请求体.所属部门+'"'
+    数据库结果 = yield 调用数据库(SQL语句, 回调值.next)
     if(!数据库结果[0]) return 失败返回(400, 2, "所属部门不存在。")
     SQL语句 = 'INSERT INTO user (用户名, 邮箱, 姓, 名, 所属部门, 帐户状态) VALUES ("'+请求体.用户名+'", "'+请求体.邮箱+'","'+请求体.姓+'","'+请求体.名+'","'+请求体.所属部门+'", 1)'
     数据库结果 = yield 调用数据库(SQL语句, 回调值.next)
