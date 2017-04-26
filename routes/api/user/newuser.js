@@ -20,10 +20,12 @@ module.exports = function (req, res, api, post) {
     SQL语句 = 'SELECT * FROM user WHERE 用户名 = "'+请求体.用户名+'"'
     数据库结果 = yield 调用数据库(SQL语句, 回调值.next)
     if(数据库结果[0]) return 失败返回(400, 1, "用户名已被占用。")
-    SQL语句 = 'SELECT * FROM node WHERE id = "'+请求体.所属部门+'"'
+    SQL语句 = 'SELECT * FROM node WHERE 名称 = "'+请求体.所属部门+'"'
     数据库结果 = yield 调用数据库(SQL语句, 回调值.next)
+    var 部门
     if(!数据库结果[0]) return 失败返回(400, 2, "所属部门不存在。")
-    SQL语句 = 'INSERT INTO user (用户名, 邮箱, 姓, 名, 所属部门, 帐户状态) VALUES ("'+请求体.用户名+'", "'+请求体.邮箱+'","'+请求体.姓+'","'+请求体.名+'","'+请求体.所属部门+'", 1)'
+    else 部门 = 数据库结果[0]
+    SQL语句 = 'INSERT INTO user (用户名, 邮箱, 姓, 名, 所属部门, 帐户状态) VALUES ("'+请求体.用户名+'", "'+请求体.邮箱+'","'+请求体.姓+'","'+请求体.名+'","'+部门.id+'", 1)'
     数据库结果 = yield 调用数据库(SQL语句, 回调值.next)
     var 临时登录密钥 = 随机数生成器(16)
     SQL语句 = 'INSERT INTO user_recovery (id, 密钥) VALUES ("'+数据库结果.insertId+'", "'+临时登录密钥+'")'

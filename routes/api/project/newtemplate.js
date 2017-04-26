@@ -7,7 +7,6 @@ module.exports = function (req, res, api, post) {
     var back4Fail = api.back4Fail
     var back4Success = api.back4Success
     debug(post)
-    
     if (!post.title || post.title == '') return back4Fail(400, 0, "标题未填写。")
     if ( !post.description || post.description == '') return back4Fail(400, 0, "描述未填写。")
     if (!post.form) return back4Fail(400, 0, "缺少字段。")

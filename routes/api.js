@@ -8,10 +8,10 @@ var sync = require('sync_back').run
 var 动态验证码 = require('authenticator');
 var interface = {}
 var 空 = null
-var 加密 = require('bcrypt');
-const 盐范围 = 10;
+
 interface.project = {}
 interface.user = {}
+interface.node = {}
 interface.project.newtemplate = require('./api/project/newtemplate')
 interface.project.publishtemplate = require('./api/project/publishtemplate')
 interface.project.newproject = require('./api/project/newproject')
@@ -19,6 +19,7 @@ interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
 interface.user.login = require('./api/user/login')
+interface.node.newnode = require('./api/node/newnode')
   /* 
    * 用户登录
    * /project
@@ -84,7 +85,17 @@ router.post('/project/newproject', function (req, res, next) {
     interface.project.newproject(req, res, api, post)
   })
 })
-
+  /* 
+   * 部门
+   * /node
+   * 包括部门管理和查询接口
+   */
+router.post('/node/newnode', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.node.newnode(req, res, api, post)
+  })
+})
 function run(req, res, opt, fun) {
   sync(function* (api) {
     var needLogin = opt.login != null ? opt.login : true
