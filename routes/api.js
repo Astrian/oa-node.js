@@ -18,88 +18,70 @@ interface.project.newproject = require('./api/project/newproject')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
-  /*            *
-   * 用户登录    */
-router.post('/login', function (req, res, next) {
-    var POST数据 = req.body
+interface.user.login = require('./api/user/login')
+  /* 
+   * 用户登录
+   * /project
+   * 包括用户登录、新建用户、管理用户的接口。
+   */
+  // 用户登录
+router.post('/user/login', function (req, res, next) {
+    var post = req.body
     run(req, res, {
       'login': false
     }, function (api) {
-      sync(function* (back) {
-        var 失败返回 = api.back4Fail
-        var 成功返回 = api.back4Success
-        var SQL语句 = 'SELECT 密钥, id FROM user WHERE 用户名 = "' + POST数据.用户名 + '"'
-        var 查询结果 = yield 调用数据库(SQL语句, back.next)
-        if (!查询结果) {
-          return 失败返回(400, 1, '用户不存在')
-        }
-        var 密钥 = 查询结果[0].密钥
-        var 验证结果 = 动态验证码.verifyToken(密钥, POST数据.验证码)
-        
-        验证结果 = {delta: 0} // 调试用
-        
-        if (验证结果) {
-          if (验证结果.delta == 0) {
-            req.session.user = 查询结果[0].id
-            return 成功返回(空)
-          }
-          else {
-            调试输出(验证结果)
-            return 失败返回(500, 0, '未知的服务器错误。')
-          }
-        }
-        else {
-          return 失败返回(401, 0, '动态验证码不正确，或已过期。')
-        }
-      })
+      interface.user.login(req, res, api, post)
     })
   })
-/*              *
- * 重置动态验证码 */
-router.post('/user/recovery', function(req,res,next){
-  var post = req.body
-  run(req, res, {login: false}, function (api) {
-    interface.user.recovery(req, res, api, post)
+  // 重置动态验证码
+router.post('/user/recovery', function (req, res, next) {
+    var post = req.body
+    run(req, res, {
+      login: false
+    }, function (api) {
+      interface.user.recovery(req, res, api, post)
+    })
   })
-})
-/*               *
- * 确认重置动态密钥 */
-router.post('/user/confirmtoken', function(req,res,next){
-  var post = req.body
-  run(req, res, {login: false}, function (api) {
-    interface.user.confirmtoken(req, res, api, post)
+  // 确认重置动态验证码
+router.post('/user/confirmtoken', function (req, res, next) {
+    var post = req.body
+    run(req, res, {
+      login: false
+    }, function (api) {
+      interface.user.confirmtoken(req, res, api, post)
+    })
   })
-})
-  /*            *
-   * 新建专案模板 */
+  // 新建用户
+router.post('/user/newuser', function (req, res, next) {
+    var post = req.body
+    run(req, res, {}, function (api) {
+      interface.user.newuser(req, res, api, post)
+    })
+  })
+  /* 
+   * 专案
+   * /project
+   * 包括专案模板和专案本身的操作接口。
+   */
+  // 新建专案模板
 router.post('/project/newtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.newtemplate(req, res, api, post)
     })
   })
-  /*            *
-   * 发布专案模板 */
+  // 发布专案模板
 router.post('/project/publishtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.publishtemplate(req, res, api, post)
     })
   })
-  /*          *
-   * 新建专案  */
+  // 新建专案
 router.post('/project/newproject', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.newproject(req, res, api, post)
-    })
-  })
-  /*         *
-   * 新建用户 */
-router.post('/user/newuser', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {
-    interface.user.newuser(req, res, api, post)
+    interface.project.newproject(req, res, api, post)
   })
 })
 
