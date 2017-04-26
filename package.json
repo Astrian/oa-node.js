@@ -8,8 +8,11 @@
     "debug": "export DEBUG=\"oa:*\" && supervisor ./bin/www"
   },
   "dependencies": {
+    "authenticator": "^1.1.2",
+    "bcrypt": "^1.0.2",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
+    "crypto-random-string": "^1.0.0",
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "express-session": "^1.14.2",
