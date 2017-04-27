@@ -4,10 +4,10 @@ var 动态验证码 = require('authenticator')
 var 回调函数是一个反人类的东西 = require('sync_back').run
 var 空 = null
 module.exports = function (req, res, api, post) {
-    var 请求体 = req.body
+  var 请求体 = req.body
   回调函数是一个反人类的东西(function* (back) {
-    var 失败返回 = api.back4Fail
-    var 成功返回 = api.back4Success
+  var 失败返回 = api.back4Fail
+  var 成功返回 = api.back4Success
     var SQL语句 = 'SELECT 密钥, id FROM user WHERE 用户名 = "' + 请求体.用户名 + '"'
     var 查询结果 = yield 调用数据库(SQL语句, back.next)
     if (!查询结果) return 失败返回(400, 1, '用户不存在')

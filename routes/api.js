@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var 调试输出 = require('debug')('oa:api');
+var debug = require('debug')('oa:api');
 var util = require('util')
 var Db = require('./modules/Db')
 var 调用数据库 = require('./modules/Db').exec
@@ -8,7 +8,6 @@ var sync = require('sync_back').run
 var 动态验证码 = require('authenticator');
 var interface = {}
 var 空 = null
-
 interface.project = {}
 interface.user = {}
 interface.node = {}
@@ -20,15 +19,15 @@ interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
 interface.user.login = require('./api/user/login')
 interface.node.newnode = require('./api/node/newnode')
-  /* 
-   * 用户登录
-   * /project
+  /*
+   * 用户
+   * /user
    * 包括用户登录、新建用户、管理用户的接口。
    */
   // 用户登录
 router.post('/user/login', function (req, res, next) {
-    var post = req.body
-    run(req, res, {
+  var post = req.body
+  run(req, res, {
       'login': false
     }, function (api) {
       interface.user.login(req, res, api, post)
@@ -59,7 +58,7 @@ router.post('/user/newuser', function (req, res, next) {
       interface.user.newuser(req, res, api, post)
     })
   })
-  /* 
+  /*
    * 专案
    * /project
    * 包括专案模板和专案本身的操作接口。
@@ -85,7 +84,8 @@ router.post('/project/newproject', function (req, res, next) {
     interface.project.newproject(req, res, api, post)
   })
 })
-  /* 
+
+  /*
    * 部门
    * /node
    * 包括部门管理和查询接口
@@ -96,6 +96,7 @@ router.post('/node/newnode', function (req, res, next) {
     interface.node.newnode(req, res, api, post)
   })
 })
+
 function run(req, res, opt, fun) {
   sync(function* (api) {
     var needLogin = opt.login != null ? opt.login : true
@@ -121,7 +122,7 @@ function run(req, res, opt, fun) {
 
     function failBack(httpCode, code, des) {
       var json = {}
-      json.状态 = 'Fail'
+      json.状态 = '失败'
       json.错误码 = code
       json.错误描述 = des
       res.writeHead(httpCode, {
