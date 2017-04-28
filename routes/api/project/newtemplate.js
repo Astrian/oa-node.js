@@ -14,21 +14,21 @@ module.exports = function (req, res, api, 请求体) {
     for (var i in 流程) {
       if (!流程[i] || 流程[i] == '') return 失败返回(400, 3, "流程不完整。")
       var 判断值TOF = '';
-      if (类型判断.isArray(流程[i].判断)) {
-        for (var k in 流程[i].判断.条件) {
-          switch (k) {
-            case '<':
-            case '<=':
-            case '>':
-            case '>=':
-            case '=': break;
-            default: 判断值TOF = '字段有错误：判断值不是有效的符号'
-          }
+      if (类型判断.isObject(流程[i].判断)) {
+        switch (流程[i].判断.条件) {
+          case '<':
+          case '<=':
+          case '>':
+          case '>=':
+            if (请求体.表单内容[流程[i].判断.字段].类型 != '数字') 判断值TOF = '字段有错误：判断值不是有效的符号。';
+          case '=': break;
+          default: 判断值TOF = '字段有错误：判断值不是有效的符号。'
         }
       }
-      else {
+      else if(类型判断.isString(流程[i].判断)) {
         if (流程[i].判断 != "其他") 判断值TOF = '字段有错误：判断值不应该是一个不正确的字符串。'
       }
+      else 判断值TOF = '字段有错误：判断对象不正确。'
       if (判断值TOF != '') return 失败返回(400, 4, 判断值TOF)
     }
     var 表单 = 请求体.表单内容

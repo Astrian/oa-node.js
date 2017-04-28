@@ -14,17 +14,19 @@ interface.node = {}
 interface.project.newtemplate = require('./api/project/newtemplate')
 interface.project.publishtemplate = require('./api/project/publishtemplate')
 interface.project.newproject = require('./api/project/newproject')
+interface.project.submitproject = require('./api/project/submitproject')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
 interface.user.login = require('./api/user/login')
 interface.node.newnode = require('./api/node/newnode')
-  /*
-   * 用户
-   * /user
-   * 包括用户登录、新建用户、管理用户的接口。
-   */
-  // 用户登录
+
+/*
+ * 用户
+ * /user
+ * 包括用户登录、新建用户、管理用户的接口。
+ */
+// 用户登录
 router.post('/user/login', function (req, res, next) {
   var post = req.body
   run(req, res, {
@@ -33,7 +35,7 @@ router.post('/user/login', function (req, res, next) {
       interface.user.login(req, res, api, post)
     })
   })
-  // 重置动态验证码
+// 重置动态验证码
 router.post('/user/recovery', function (req, res, next) {
     var post = req.body
     run(req, res, {
@@ -42,7 +44,7 @@ router.post('/user/recovery', function (req, res, next) {
       interface.user.recovery(req, res, api, post)
     })
   })
-  // 确认重置动态验证码
+// 确认重置动态验证码
 router.post('/user/confirmtoken', function (req, res, next) {
     var post = req.body
     run(req, res, {
@@ -51,45 +53,54 @@ router.post('/user/confirmtoken', function (req, res, next) {
       interface.user.confirmtoken(req, res, api, post)
     })
   })
-  // 新建用户
+// 新建用户
 router.post('/user/newuser', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.user.newuser(req, res, api, post)
     })
   })
-  /*
-   * 专案
-   * /project
-   * 包括专案模板和专案本身的操作接口。
-   */
-  // 新建专案模板
+
+/*
+ * 专案
+ * /project
+ * 包括专案模板和专案本身的操作接口。
+ */
+// 新建专案模板
 router.post('/project/newtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.newtemplate(req, res, api, post)
     })
   })
-  // 发布专案模板
+// 发布专案模板
 router.post('/project/publishtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.publishtemplate(req, res, api, post)
     })
   })
-  // 新建专案
+// 新建专案
 router.post('/project/newproject', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {
     interface.project.newproject(req, res, api, post)
   })
 })
+// 将专案提交审核
+router.post('/project/submitproject', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.submitproject(req, res, api, post)
+  })
+})
 
-  /*
-   * 部门
-   * /node
-   * 包括部门管理和查询接口
-   */
+/*
+ * 部门
+ * /node
+ * 包括部门管理和查询接口
+ */
+ // 创建新部门
 router.post('/node/newnode', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {

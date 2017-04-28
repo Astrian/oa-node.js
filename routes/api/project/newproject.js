@@ -31,9 +31,10 @@ module.exports = function (req, res, api, 请求体) {
         if(!专案模板数据[i].类型[用户填写数据[i]]) return 失败返回(400, 0, '所选数据（'+用户填写数据[i]+'）不在数组 '+专案模板数据[i].名称+' 的范围内')
       }
     }
-    var SQL语句 = "INSERT INTO project (申请人, 申请时间, 模板, 数据, 状态) VALUES ('" + 登录用户 + "', " + new Date().getTime() + ",'"+请求体.模板ID+"', '"+JSON.stringify(用户填写数据)+"', 0)";
-    debug(SQL语句)
-    yield 调用数据库(SQL语句, 回调.next)
-    成功返回(空)
+    SQL语句 = "INSERT INTO project (申请人, 申请时间, 模板, 数据, 状态) VALUES ('" + 登录用户 + "', " + new Date().getTime() + ",'"+请求体.模板ID+"', '"+JSON.stringify(用户填写数据)+"', 0)";
+    数据库结果 = yield 调用数据库(SQL语句, 回调.next)
+    成功返回({
+      专案ID: 数据库结果.insertId
+    })
   })
 }
