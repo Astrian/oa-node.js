@@ -1,0 +1,63 @@
+<html>
+
+<head>
+  <title>登录 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/index.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div id='vue'>
+    <div class="loginscreen">
+      <div class='loginscreen-body'>
+        <p class="login-title-text">欢迎回来</p>
+        <div class="loginmodal">
+          <div class="form-inline">
+            <div class="form-group">
+              <label class="sr-only" for="username">用户名</label>
+              <input class="form-control" id="username" placeholder="用户名" v-model="username"> </div>
+            <div class="form-group">
+              <label class="sr-only" for="dynamiccode">Password</label>
+              <input class="form-control" id="dynamiccode" placeholder="动态口令" v-model="dynamiccode"> </div>
+            <button class="btn btn-default" v-on:click="login()">登录</button>
+          </div>
+          <div class="needhelp">
+            <p class="small"> 需要帮助？<a href="/recovery" class="small">进入帐户恢复流程</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="credit">
+        <p>Image Credit (C) Google Calendar</p>
+      </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{modalTitle}}</h4> </div>
+          <div class="modal-body">
+            <p>{{modalContent}}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  </div>
+</body>
+<!-- Vue 和页面 JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<script src="/public/js/index.js"></script>
+
+</html>

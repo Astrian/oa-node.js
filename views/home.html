@@ -1,0 +1,67 @@
+<html>
+
+<head>
+  <title>首页 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/home.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div id='vue'>
+    <div class='flex container'>
+      <div class='webhead'>
+        <div class='website-name'>企业自动化办公系统</div>
+          <div class="dropdown userinfo">
+            <image class='avatar img-circle' v-bind:src='avatar'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{username}}&nbsp;<span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="usermenu">
+                <li><a href="#">退出登录</a></li>
+              </ul>
+          </div>
+      </div>
+      <div class='main row'>
+        <div class='manupanel col-md-8'>
+          <div>功能表</div>
+          <image src=''></image>
+        </div>
+        <div class='notification col-md-4'>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">通知</h3>
+            </div>
+            <div class="panel-body">
+              <div class='emptynoti'><span class='empty-title'>啊咧…… 通知箱是空的</span><br>当你的专案有新的动态，或是收到了新的公告<br>这些消息会在这里出现</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{modalTitle}}</h4> </div>
+          <div class="modal-body">
+            <p>{{modalContent}}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+  </div>
+</body>
+<!-- Vue、JQuery 和页面 JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<script src="/public/js/home.js"></script>
+
+</html>

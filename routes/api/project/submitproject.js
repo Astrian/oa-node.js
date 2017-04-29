@@ -30,14 +30,25 @@ module.exports = function (req, res, api, 请求体) {
         if((流程[i].判断.条件 == '=') && (专案.数据[流程[i].判断.字段] == 流程[i].判断.基准值)) 流程路由 = i;
       }
     }
-    debug(流程路由)
     if(!流程路由)  return 失败返回(400,1, "相应专案无法进入任何流程。")
+    debug(流程[流程路由].流程[1])
     SQL语句 = 'UPDATE project SET 进度 = 0, 路由 = '+流程路由+', 状态 = 1 WHERE id = '+专案.id
-    debug(SQL语句)
     yield 调用数据库(SQL语句, 回调.next)
     SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES ('+专案.id+', '+登录用户+', "提交该专案", '+new Date().getTime()+')'
     yield 调用数据库(SQL语句, 回调.next)
-    // 缺通知系统
+    SQL语句 = 'SELECT id FROM node WHERE 名称 = "'+流程[流程路由].流程[0]+'"'
+    调用结果 = yield 调用数据库( SQL语句, 回调.next)
+    SQL语句 = 'UPDATE project SET 目前处理的部门 = '+调用结果[0].id+' WHERE id = '+专案.id
+    yield 调用数据库(SQL语句, 回调.next)
+    SQL语句 = 'SELECT * FROM user WHERE 所属部门 = '+调用结果[0].id
+    var 通知者 = yield 调用数据库( SQL语句, 回调.next)
+    SQL语句 = 'SELECT * FROM user WHERE id = '+登录用户
+    var 提交者 = yield 调用数据库( SQL语句, 回调.next)
+    debug(通知者[0])
+    for(var i in 通知者){
+      SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读) VALUES ('+通知者[i].id+', '+专案.id+', "专案", "由 '+(提交者[0].姓).concat(提交者[0].名)+' 提交的专案正等待处理。", false)'
+      yield 调用数据库( SQL语句, 回调.next)
+    }
     成功返回({
       流程路由: 流程[流程路由].流程
     })

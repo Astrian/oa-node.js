@@ -19,6 +19,8 @@ interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
 interface.user.login = require('./api/user/login')
+interface.user.signout = require('./api/user/signout')
+interface.user.getinfo = require('./api/user/getinfo')
 interface.node.newnode = require('./api/node/newnode')
 
 /*
@@ -33,6 +35,20 @@ router.post('/user/login', function (req, res, next) {
       'login': false
     }, function (api) {
       interface.user.login(req, res, api, post)
+    })
+  })
+// 注销登录
+router.get('/user/logout', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+      interface.user.signout(req, res, api, post)
+    })
+  })
+//获取登录用户信息
+router.get('/user/getinfo', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+      interface.user.getinfo(req, res, api, post)
     })
   })
 // 重置动态验证码

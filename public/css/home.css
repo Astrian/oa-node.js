@@ -1,10 +1,50 @@
-body{
-  background-image: url('');
+.flex, .flex div{
+  display: flex;
 }
-
-.loginscreen{
-  flex-direction: column;
-  justify-content: center;
+.webhead{
+  margin-top: 40px;
+}
+.website-name{
+  font-size: 25px;
+}
+.webhead{
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  height: 100%;
+}
+.avatar{
+  width: 30px;
+  height: 30px;
+}
+.userinfo{
+  align-items: center;
+}
+.container{
+  flex-direction: column;
+}
+.manupanel{
+  flex-grow: 4
+}
+.notification{
+  flex-grow: 1
+}
+.main{
+  margin-top: 40px;
+}
+.emptynoti{
+  flex-direction: column;
+  height: 300px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.59);
+}
+.empty-title{
+  font-size: 20px;
+}
+.panel{
+  flex-direction: column;
+  width: 100%;
 }
