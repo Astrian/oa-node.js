@@ -1,0 +1,10 @@
+body{
+  background-image: url('');
+}
+
+.loginscreen{
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
