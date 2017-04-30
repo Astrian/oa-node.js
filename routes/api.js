@@ -11,10 +11,13 @@ var 空 = null
 interface.project = {}
 interface.user = {}
 interface.node = {}
+interface.notification = {}
 interface.project.newtemplate = require('./api/project/newtemplate')
 interface.project.publishtemplate = require('./api/project/publishtemplate')
 interface.project.newproject = require('./api/project/newproject')
 interface.project.submitproject = require('./api/project/submitproject')
+interface.project.reviewproject = require('./api/project/reviewproject')
+interface.project.getprojectlist = require('./api/project/getprojectlist')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
@@ -22,7 +25,7 @@ interface.user.login = require('./api/user/login')
 interface.user.signout = require('./api/user/signout')
 interface.user.getinfo = require('./api/user/getinfo')
 interface.node.newnode = require('./api/node/newnode')
-
+interface.notification.getnotification = require('./api/notification/getnotification')
 /*
  * 用户
  * /user
@@ -38,7 +41,7 @@ router.post('/user/login', function (req, res, next) {
     })
   })
 // 注销登录
-router.get('/user/logout', function (req, res, next) {
+router.get('/user/signout', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {
       interface.user.signout(req, res, api, post)
@@ -110,6 +113,20 @@ router.post('/project/submitproject', function (req, res, next) {
     interface.project.submitproject(req, res, api, post)
   })
 })
+// 审核专案
+router.post('/project/reviewproject', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.reviewproject(req, res, api, post)
+  })
+})
+// 获取专案列表
+router.get('/project/getprojectlist', function (req, res, next) {
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.getprojectlist(req, res, api, post)
+  })
+})
 
 /*
  * 部门
@@ -121,6 +138,19 @@ router.post('/node/newnode', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {
     interface.node.newnode(req, res, api, post)
+  })
+})
+
+/*
+ * 通知
+ * /notification
+ * 获取通知
+ */
+//获取通知
+router.get('/notification/getnotification', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.notification.getnotification(req, res, api, post)
   })
 })
 

@@ -12,56 +12,103 @@
 </head>
 
 <body>
-  <div id='vue'>
-    <div class='flex container'>
-      <div class='webhead'>
-        <div class='website-name'>企业自动化办公系统</div>
-          <div class="dropdown userinfo">
-            <image class='avatar img-circle' v-bind:src='avatar'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{username}}&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu" aria-labelledby="usermenu">
-                <li><a href="#">退出登录</a></li>
-              </ul>
-          </div>
-      </div>
-      <div class='main row'>
-        <div class='manupanel col-md-8'>
-          <div>功能表</div>
-          <image src=''></image>
-        </div>
-        <div class='notification col-md-4'>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">通知</h3>
-            </div>
-            <div class="panel-body">
-              <div class='emptynoti'><span class='empty-title'>啊咧…… 通知箱是空的</span><br>当你的专案有新的动态，或是收到了新的公告<br>这些消息会在这里出现</div>
-            </div>
-          </div>
-        </div>
+  <div class='flex container'>
+    <div class='webhead' id='user'>
+      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
+      <div class="dropdown userinfo">
+        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="usermenu">
+            <li><a href="/signout">退出登录</a></li>
+          </ul>
       </div>
     </div>
-    <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">{{modalTitle}}</h4> </div>
-          <div class="modal-body">
-            <p>{{modalContent}}</p>
+    <div class='main row'>
+      <div class='manupanel col-md-8'>
+        <div class="function-title">功能表</div>
+        <a href='/project'>
+        <div class='menu-cell'>
+          <div>
+            <image src='/public/images/project.svg' class='home-icon'></image>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+          <div class='menu-cell-text'> <span class='menu-cell-title'>专案</span> <span class='menu-cell-description'>新建、管理专案，与其他同事完成工作。</span> </div>
+        </div>
+        </a>
+        <div class='menu-cell'>
+          <div>
+            <image src='/public/images/notification.svg' class='home-icon'></image>
+          </div>
+          <div class='menu-cell-text'> <span class='menu-cell-title'>公告</span> <span class='menu-cell-description'>查阅历史公告，发布重要通知。</span> </div>
+        </div>
+        <div class='menu-cell'>
+          <div>
+            <image src='/public/images/people.svg' class='home-icon'></image>
+          </div>
+          <div class='menu-cell-text'> <span class='menu-cell-title'>人事</span> <span class='menu-cell-description'>管理企业员工，及其系统帐户。</span> </div>
+        </div>
+        <div class='menu-cell'>
+          <div>
+            <image src='/public/images/people.svg' class='home-icon'></image>
+          </div>
+          <div class='menu-cell-text'> <span class='menu-cell-title'>部门</span> <span class='menu-cell-description'>管理企业架构与节点关系。</span> </div>
+        </div>
+      </div>
+      <div class='notification col-md-4'>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">通知</h3> </div>
+          <ul v-if='notification' class="list-group">
+            <div v-for="item in notification">
+            <a href='#' class="list-group-item">
+              <div class='noti-cell noti-cell-read'>
+                <div class="noti-cell-content">
+                  <div><span><span class="label label-info" v-if='item.已读 == 0'>新通知</span>{{item.内容}}</span></div>
+                  <div class="small time">{{item.发送时间}}</div>
+                </div>
+                <div class='noti-cell-icon'>
+                  <image src='/public/images/project.svg' v-if='item.类型 == "专案"'></image>
+                  <image src='/public/images/notification.svg' v-else-if='item.类型 == "公告"'></image>
+                </div>
+              </div>
+              </a>
+            </div>
+          </ul>
+          <div class="panel-body" v-else>
+            <div class='emptynoti'><span class='empty-title'>啊咧…… 通知箱是空的</span>
+              <br>当你的专案有新的动态，或是收到了新的公告
+              <br>这些消息会在这里出现</div>
           </div>
         </div>
-        <!-- /.modal-content -->
       </div>
-      <!-- /.modal-dialog -->
     </div>
   </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{modalTitle}}</h4> </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
 </body>
-<!-- Vue、JQuery 和页面 JS -->
+<!-- moment -->
+<script src="/resource/moment/min/moment-with-locales.min.js"></script>
+<!-- Vue JS -->
 <script src="/resource/vue/dist/vue.js"></script>
 <script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
-<script src="/public/js/home.js"></script>
+<!-- 模态通知框 -->
+<script src='/public/js/modal.js'></script>
+<!-- 获取用户数据 -->
+<script src="/public/js/userinfo.js"></script>
+<!-- 获取通知数据 -->
+<script src='/public/js/notification.js'></script>
 
 </html>

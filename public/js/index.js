@@ -14,7 +14,7 @@ var login = new Vue({
         验证码: this.dynamiccode
       }
       this.$http.post('/api/user/login', data, options).then(response => {
-        window.location = '/'
+        window.location = '/home'
       }, response => {
         $('#modal').modal()
         this.modalTitle = '出错了'

@@ -44,9 +44,8 @@ module.exports = function (req, res, api, 请求体) {
     var 通知者 = yield 调用数据库( SQL语句, 回调.next)
     SQL语句 = 'SELECT * FROM user WHERE id = '+登录用户
     var 提交者 = yield 调用数据库( SQL语句, 回调.next)
-    debug(通知者[0])
     for(var i in 通知者){
-      SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读) VALUES ('+通知者[i].id+', '+专案.id+', "专案", "由 '+(提交者[0].姓).concat(提交者[0].名)+' 提交的专案正等待处理。", false)'
+      SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES ('+通知者[i].id+', '+专案.id+', "专案", "由 '+(提交者[0].姓).concat(提交者[0].名)+' 提交的专案正等待处理。", false, '+new Date().getTime()+')'
       yield 调用数据库( SQL语句, 回调.next)
     }
     成功返回({

@@ -6,6 +6,10 @@
 }
 .website-name{
   font-size: 25px;
+  color: black;
+}
+.website-title a:hover{
+  text-decoration: none;
 }
 .webhead{
   width: 100%;
@@ -24,7 +28,9 @@
   flex-direction: column;
 }
 .manupanel{
-  flex-grow: 4
+  flex-grow: 4;
+  justify-content: flex-start;
+  flex-direction: column;
 }
 .notification{
   flex-grow: 1
@@ -44,7 +50,72 @@
 .empty-title{
   font-size: 20px;
 }
+.function-title{
+  font-size: 30px;
+}
 .panel{
   flex-direction: column;
+  width: 100%;
+}
+.website-title{
+  align-items: center;
+}
+.home-icon{
+  width: 48px;
+  height: 48px;
+}
+.menu-cell-text{
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+.menu-cell-title{
+  font-size: 20px;
+}
+.menu-cell{
+  margin-top: 10px;
+  border-color: #a0a0a0;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  padding: 10px;
+  background-color: #f8f8f8;
+}
+.noti-cell-content{
+  flex-grow: 1;
+}
+.noti-cell-icon{
+  width: 20%;
+  justify-content: center;
+}
+.list-group-item{
+  align-items: center;
+}
+.noti-cell-content{
+  flex-direction: column;
+}
+.list-group-item{
+  background-color: #f2f2f2;
+}
+.time{
+  padding-top: 8px;
+}
+.list-group{
+  flex-direction: column;
+  width: 100%;
+}
+a .menu-cell{
+  color: #2e2e2e;
+}
+a:hover{
+  text-decoration: none !important;
+}
+.columnview{
+  flex-direction: column;
+}
+.cards{
+  margin-top: 30px;
+}
+.list-group-item{
   width: 100%;
 }
