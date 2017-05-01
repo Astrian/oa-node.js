@@ -33,15 +33,17 @@
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
         <div id='projectlist' class="columnview">
-          <div>
-            <ul class="nav nav-pills">
-              <li role="presentation" class="active" v-if='panel == 1'><a href="#" v-on:click='changepanel(1)'>待处理的</a></li>
-              <li role="presentation" v-else><a href="#" v-on:click='changepanel(1)'>待处理的</a></li>
-              <li role="presentation" class="active" v-if='panel == 2'><a href="#" v-on:click='changepanel(2)'>我提交的</a></li>
-              <li role="presentation" v-else><a href="#" v-on:click='changepanel(2)'>我提交的</a></li>
-            </ul>
+          <div id='template' class='columnview'>
+            <h3>我创建的模板</h3>
+            <a v-bind:href='"/project/template/detail?id="+template.id' v-for='template in templates'>
+              <div class="panel panel-default">
+                <div class="panel-body columnview">
+                  <p class='projecttitle'>{{template.标题}}</p>
+                  <p class='projectdes'>{{template.描述}}</p>
+                </div>
+              </div>
+            </a>
           </div>
-          
         </div>
       </div>
     </div>

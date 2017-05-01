@@ -34,5 +34,9 @@ router.get('/project/template', function(req, res, next) {
   if (req.session.user != null) res.render('template');
   else res.redirect('/')
 });
+router.get('/project/template/detail', function(req, res, next) {
+  if (req.session.user != null) res.render('template-detail');
+  else res.redirect('/')
+});
 
 module.exports = router;
