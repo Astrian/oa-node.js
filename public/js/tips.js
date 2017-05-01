@@ -27,6 +27,16 @@ function tip(){
       tip.title = '完成'
       tip.content = '专案已被打回至发布者。'
       break;
+    case 'project-new-1':
+      tip.show = true
+      tip.title = '完成'
+      tip.content = '已新建专案，可以在本页进行提交。'
+      break;
+    case 'project-new-2':
+      tip.show = true
+      tip.title = '完成'
+      tip.content = '专案已成功提交。'
+      break;
     default:
   }
 }

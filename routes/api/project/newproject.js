@@ -19,11 +19,10 @@ module.exports = function (req, res, api, 请求体) {
     if(专案模板数据.length != 用户填写数据.length) return 失败返回(400, 0, '字段不完整。')
     for(var i in 专案模板数据){
       if(!类型判断.isArray(专案模板数据[i].类型)){
-        debug(专案模板数据[i].类型)
         switch (专案模板数据[i].类型){
           case '字段': if(!(类型判断.isString(用户填写数据[i]))) return 失败返回(400, 0, '字段 '+专案模板数据[i].名称+' 的类型出错，它应该是一个字段。'); break;
           case '文本': if(!(类型判断.isString(用户填写数据[i]))) return 失败返回(400, 0, '字段 '+专案模板数据[i].名称+' 的类型出错，它应该是一段文本。'); break;
-          case '数字': if(!(类型判断.isNumber(用户填写数据[i]))) return 失败返回(400, 0, '字段 '+专案模板数据[i].名称+' 的类型出错，它应该是一个数字。'); break;
+          case '数字': if(!(类型判断.isNumber(+用户填写数据[i]))) return 失败返回(400, 0, '字段 '+专案模板数据[i].名称+' 的类型出错，它应该是一个数字。'); break;
         }
       }
       else{

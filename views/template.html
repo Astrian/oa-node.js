@@ -24,66 +24,25 @@
     </div>
     <div class='main row'>
       <div class='col-md-3'>
-        <div class="list-group"> <a href="/project" class="list-group-item">专案列表</a> <a href="/project/new" class="list-group-item">新建专案</a> <a href="/project/template" class="list-group-item">模板</a></div>
+        <div class="list-group"> <a href="/project" class="list-group-item">
+            专案列表
+          </a> <a href="/project/new" class="list-group-item">新建专案</a> <a href="/project/template" class="list-group-item active">模板</a></div>
       </div>
       <div class='col-md-9 columnview'>
         <div id='tip'>
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
-        <div id='projectdetail' class='columnview'>
-        <h2>{{project.模板}} 
-          <span v-if='project.状态 == 0' class="label label-warning">待提交</span> 
-          <span v-if='project.状态 == 1' class="label label-success">审核中</span> 
-          <span v-if='project.状态 == -1' class="label label-default">已归档</span> 
-          <small>由 {{project.申请人}} 在 {{project.申请时间}} 新建</small>
-        </h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>字段</th>
-              <th>内容</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for='item in project.数据'>
-              <td>{{item.名称}}</td>
-              <td>{{item.数据}}</td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>专案操作历史</h3>
-        <div v-if='project.流程历史[0] != null'>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>时间</th>
-                <th>操作人</th>
-                <th>行为</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for='item in project.流程历史'>
-                <td>{{item.操作时间}}</td>
-                <td>{{item.操作人}}</td>
-                <td>{{item.行为}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else>该专案还没有任何操作历史。</div>
-        <h3>操作</h3>
-        <div v-for='permission in project.操作权限'>
-          <div v-if='(permission == "申请") && (project.状态 == 0)'>
-            <button class="btn btn-default" v-on:click='submit()'>提交审核</button>
-            <button class="btn btn-default">归档</button>
+        <div id='projectlist' class="columnview">
+          <div>
+            <ul class="nav nav-pills">
+              <li role="presentation" class="active" v-if='panel == 1'><a href="#" v-on:click='changepanel(1)'>待处理的</a></li>
+              <li role="presentation" v-else><a href="#" v-on:click='changepanel(1)'>待处理的</a></li>
+              <li role="presentation" class="active" v-if='panel == 2'><a href="#" v-on:click='changepanel(2)'>我提交的</a></li>
+              <li role="presentation" v-else><a href="#" v-on:click='changepanel(2)'>我提交的</a></li>
+            </ul>
           </div>
-          <div v-else-if='(permission == "审核") && (project.状态 == 1)'>
-            <button class="btn btn-default" v-on:click="review('同意')">同意该专案</button>
-            <button class="btn btn-default" v-on:click="review('拒绝')">拒绝</button>
-          </div>
-          <div v-else>您目前不能对该专案执行操作。</div>
+          
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -114,8 +73,8 @@
 <script src='/public/js/modal.js'></script>
 <!-- 获取用户数据 -->
 <script src="/public/js/userinfo.js"></script>
-<!-- 获取专案详情 -->
-<script src="/public/js/getprojectdetail.js"></script>
 <!-- 提示框 -->
 <script src="/public/js/tips.js"></script>
+<!-- 获取模板列表 -->
+<script src="/public/js/template.js"></script>
 </html>

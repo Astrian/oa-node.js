@@ -10,6 +10,14 @@ function getNotification(){
   user.$http.get('/api/notification/getnotification').then(res => {
     res = (JSON.parse(res.bodyText)).数据
     for(var i in res){
+      switch(res[i].类型){
+        case '专案':
+          res[i].类型 = 'project'
+          break;
+        case '公告':
+          res[i].类型 = 'notice'
+          break;
+      }
       res[i].发送时间 = moment(res[i].发送时间, 'x').fromNow()
       notification.$data.notification = res
     }

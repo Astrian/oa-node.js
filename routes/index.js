@@ -30,5 +30,9 @@ router.get('/project/new', function(req, res, next) {
   if (req.session.user != null) res.render('project-new');
   else res.redirect('/')
 });
+router.get('/project/template', function(req, res, next) {
+  if (req.session.user != null) res.render('template');
+  else res.redirect('/')
+});
 
 module.exports = router;

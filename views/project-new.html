@@ -24,20 +24,48 @@
     </div>
     <div class='main row'>
       <div class='col-md-3'>
-        <div class="list-group"> 
-          <a href="/project" class="list-group-item">专案列表 </a>
-          <a href="/project/new" class="list-group-item active">新建专案</a>
-          <a href="/project/newtemplate" class="list-group-item">新建模板</a></div>
+        <div class="list-group"> <a href="/project" class="list-group-item">专案列表 </a> <a href="/project/new" class="list-group-item active">新建专案</a> <a href="/project/template" class="list-group-item">模板</a></div>
       </div>
       <div class='col-md-9 columnview'>
-        <div id='tip'>
-          <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
-        </div>
-        <div id='newtemplate' class="columnview">
-          <div v-if='choosetemplate'>
-            <h3>选择一个专案</h3>
-            <div v-for='template in templates'>
-              {{template.标题}}
+        <div id='newproject' class="columnview">
+          <div v-if='choosetemplate' class='columnview'>
+            <h3>选择一个专案模板</h3>
+            <div v-if='templates[0]' class='columnview'>
+              <select multiple class="form-control" v-model="choosedtemplate" v-bind:disabled='choose_disable'>
+                <option v-for='template in templates' v-bind:value='template.id'>{{template.标题}}</option>
+              </select>
+              <div>
+                <button class="btn btn-default" v-on:click='whichtemplate()' v-bind:disabled='choose_disable'>继续</button>
+                <div class="progress" v-if='choose_disable'>
+                  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if='fillproject' class='columnview'>
+            <h3>{{template.标题}}<span class='small'><br><br>{{template.描述}}</span></h3>
+            <div class='columnview'>
+              <div v-for='(field, index) in template.表字段'>
+                <div class="form-group columnview" v-if='field.类型 == "数字"'>
+                  <label v-bind:for='"field-"+index'>{{field.名称}}</label>
+                  <input type="number" class="form-control" v-bind:id='"field-"+index' v-model="project_fill[index]">
+                  <p class="help-block">{{field.描述}}</p>
+                </div>
+                <div class="form-group columnview" v-else-if='field.类型 == "字段"'>
+                  <label v-bind:for='"field-"+index'>{{field.名称}}</label>
+                  <input type="text" class="form-control" v-bind:id='"field-"+index' v-model="project_fill[index]">
+                  <p class="help-block">{{field.描述}}</p>
+                </div>
+                <div class="form-group columnview" v-else-if='field.类型 == "文本"'>
+                  <label v-bind:for='"field-"+index'>{{field.名称}}</label>
+                  <textarea class="form-control" rows="3" v-bind:id='"field-"+index' v-model="project_fill[index]"></textarea>
+                  <p class="help-block">{{field.描述}}</p>
+                </div>
+              </div>
+              <div>
+                <button class="btn btn-primary" v-on:click='submit()'>提交</button>
+                <button class="btn btn-default" v-on:click='back()'>重新选择模板</button>
+              </div>
             </div>
           </div>
         </div>
@@ -73,6 +101,7 @@
 <script src="/public/js/userinfo.js"></script>
 <!-- 提示框 -->
 <script src="/public/js/tips.js"></script>
-  <!-- 新专案 -->
-<script src="/public/js/newtemplate.js"></script>
+<!-- 新专案 -->
+<script src="/public/js/newproject.js"></script>
+
 </html>

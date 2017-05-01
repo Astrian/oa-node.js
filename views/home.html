@@ -58,15 +58,15 @@
             <h3 class="panel-title">通知</h3> </div>
           <ul v-if='notification' class="list-group">
             <div v-for="item in notification">
-            <a href='#' class="list-group-item">
+            <a v-bind:href='"/"+item.类型+"/detail?id="+item.连接至' class="list-group-item">
               <div class='noti-cell noti-cell-read'>
                 <div class="noti-cell-content">
                   <div><span><span class="label label-info" v-if='item.已读 == 0'>新通知</span>{{item.内容}}</span></div>
                   <div class="small time">{{item.发送时间}}</div>
                 </div>
                 <div class='noti-cell-icon'>
-                  <image src='/public/images/project.svg' v-if='item.类型 == "专案"'></image>
-                  <image src='/public/images/notification.svg' v-else-if='item.类型 == "公告"'></image>
+                  <image src='/public/images/project.svg' v-if='item.类型 == "project"'></image>
+                  <image src='/public/images/notification.svg' v-else-if='item.类型 == "notice"'></image>
                 </div>
               </div>
               </a>

@@ -128,3 +128,10 @@ a:hover{
 .alert{
   width: 100%;
 }
+.progress{
+  flex-grow: 1;
+  margin-left: 20px;
+}
+.form-group{
+  width: 100%;
+}

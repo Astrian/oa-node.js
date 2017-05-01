@@ -6,6 +6,19 @@ var projectdetail = new Vue({
     operate: true,
     review: function(res){
       review(res)
+    },
+    submit: function(){
+      var data = {
+        专案ID: getUrlParam('id')
+      }
+      var options = {
+        "Content-Type": "application/json"
+      }
+      projectdetail.$http.post('/api/project/submitproject', data, options).then(res => {
+        window.location = '/project/detail?id='+getUrlParam('id')+'&tip=project-new-2'
+      },res=>{
+        modal.$data.showModal('无法提交专案', '错误是' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+      })
     }
   }
 })
