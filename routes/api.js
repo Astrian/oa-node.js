@@ -19,6 +19,7 @@ interface.project.submitproject = require('./api/project/submitproject')
 interface.project.reviewproject = require('./api/project/reviewproject')
 interface.project.getprojectlist = require('./api/project/getprojectlist')
 interface.project.getprojectdetail = require('./api/project/getprojectdetail')
+interface.project.gettemplatelist = require('./api/project/gettemplatelist')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
@@ -128,11 +129,18 @@ router.get('/project/getprojectlist', function (req, res, next) {
     interface.project.getprojectlist(req, res, api, post)
   })
 })
-// 获取专案列表
+// 获取专案详情
 router.get('/project/getprojectdetail', function (req, res, next) {
   var post = req.query
   run(req, res, {}, function (api) {
     interface.project.getprojectdetail(req, res, api, post)
+  })
+})
+// 获取模板列表
+router.get('/project/gettemplatelist', function (req, res, next) {
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.gettemplatelist(req, res, api, post)
   })
 })
 

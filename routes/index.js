@@ -21,4 +21,14 @@ router.get('/project', function(req, res, next) {
   else res.redirect('/')
 });
 
+router.get('/project/detail', function(req, res, next) {
+  if (req.session.user != null) res.render('project-detail');
+  else res.redirect('/')
+});
+
+router.get('/project/new', function(req, res, next) {
+  if (req.session.user != null) res.render('project-new');
+  else res.redirect('/')
+});
+
 module.exports = router;

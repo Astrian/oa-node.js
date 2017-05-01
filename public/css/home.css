@@ -84,8 +84,11 @@
 .noti-cell-content{
   flex-grow: 1;
 }
+.noti-cell{
+  justify-content: space-between;
+}
 .noti-cell-icon{
-  width: 20%;
+  width: 60px;
   justify-content: center;
 }
 .list-group-item{
@@ -121,4 +124,7 @@ a:hover{
 }
 .projecttitle{
   font-size: 20px;
+}
+.alert{
+  width: 100%;
 }

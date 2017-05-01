@@ -14,11 +14,11 @@ module.exports = function (req, res, api, 请求体) {
     if (请求体.type == 1) { // 获取需要我处理的专案
       SQL语句 = 'SELECT 所属部门 FROM user WHERE id = ' + 登录用户
       数据库结果 = yield 调用数据库(SQL语句, 回调.next)
-      SQL语句 = 'SELECT id,申请人, 申请时间, 模板, 状态 FROM project WHERE 目前处理的部门 = ' + 数据库结果[0].所属部门
+      SQL语句 = 'SELECT id,申请人, 申请时间, 模板, 状态 FROM project WHERE 目前处理的部门 = ' + 数据库结果[0].所属部门+' AND 状态 = 1 ORDER BY 申请时间 DESC'
       请求结果 = yield 调用数据库(SQL语句, 回调.next)
     }
     else if (请求体.type == 2) {
-      SQL语句 = 'SELECT id,申请人, 申请时间, 模板, 状态 FROM project WHERE 申请人 = ' + 登录用户
+      SQL语句 = 'SELECT id,申请人, 申请时间, 模板, 状态 FROM project WHERE 申请人 = ' + 登录用户+' ORDER BY 申请时间 DESC'
       请求结果 = yield 调用数据库(SQL语句, 回调.next)
     }
     if (请求结果[0]) {

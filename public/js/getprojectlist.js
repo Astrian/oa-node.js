@@ -1,4 +1,5 @@
 moment.locale('zh-cn');
+
 var projectlist = new Vue({
   el: '#projectlist',
   data: {
