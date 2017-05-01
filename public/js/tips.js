@@ -37,6 +37,16 @@ function tip(){
       tip.title = '完成'
       tip.content = '专案已成功提交。'
       break;
+    case 'template-submit-1':
+      tip.show = true
+      tip.title = '完成'
+      tip.content = '模板已发布。'
+      break;
+    case 'template-submit-2':
+      tip.show = true
+      tip.title = '完成'
+      tip.content = '已新建模板，可以在本页进行发布。'
+      break;
     default:
   }
 }

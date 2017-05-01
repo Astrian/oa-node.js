@@ -71,7 +71,6 @@
           </table>
         </div>
         <div v-else>该专案还没有任何操作历史。</div>
-        <h3>操作</h3>
         <div v-for='permission in project.操作权限'>
           <div v-if='(permission == "申请") && (project.状态 == 0)'>
             <button class="btn btn-default" v-on:click='submit()'>提交审核</button>
@@ -81,7 +80,6 @@
             <button class="btn btn-default" v-on:click="review('同意')">同意该专案</button>
             <button class="btn btn-default" v-on:click="review('拒绝')">拒绝</button>
           </div>
-          <div v-else>您目前不能对该专案执行操作。</div>
         </div>
       </div>
       </div>

@@ -135,3 +135,6 @@ a:hover{
 .form-group{
   width: 100%;
 }
+body{
+  padding-bottom: 30px;
+}

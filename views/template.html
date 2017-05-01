@@ -34,7 +34,7 @@
         </div>
         <div id='projectlist' class="columnview">
           <div id='template' class='columnview'>
-            <h3>我创建的模板</h3>
+            <h3>我创建的模板 <a href='/project/template/new'><button class='btn btn-default'>创建新的专案模板</button></a></h3>
             <a v-bind:href='"/project/template/detail?id="+template.id' v-for='template in templates'>
               <div class="panel panel-default">
                 <div class="panel-body columnview">

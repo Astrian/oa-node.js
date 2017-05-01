@@ -30,7 +30,58 @@
         <div id='tip'>
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
-        <div id='templatedetail' class='columnview'></div>
+        <div id='templatedetail' class='columnview'>
+          <h3>{{template.标题}}
+            <span v-if='template.状态 == 0' class="label label-warning">草稿</span> 
+            <span v-if='template.状态 == 1' class="label label-success">上线</span> 
+            <span v-if='template.状态 == -1' class="label label-default">已归档</span> 
+            <span class='small'>创建于 {{template.创建时间}}</span></h3>
+          <p>{{template.描述}}</p>
+          <h4>模板字段</h4>
+          <table class="table">
+          <thead>
+            <tr>
+              <th>名称</th>
+              <th>描述</th>
+              <th>数据类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for='item in template.表字段'>
+              <td>{{item.名称}}</td>
+              <td>{{item.描述}}</td>
+              <td>{{item.类型}}</td>
+            </tr>
+          </tbody>
+        </table>
+          <h4>专案流程路由</h4>
+          <table class="table">
+          <thead>
+            <tr>
+              <th>条件</th>
+              <th>流程路由</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for='item in template.流程'>
+              <td v-if='item.判断 == "其他"'>不符合上述情况时</td>
+              <td v-else>当&nbsp;{{item.判断.字段}}&nbsp;
+                <span v-if='item.判断.条件 == ">"'>大于</span>
+                <span v-if='item.判断.条件 == ">="'>大于或等于</span>
+                <span v-if='item.判断.条件 == "<"'>小于</span>
+                <span v-if='item.判断.条件 == "<="'>小于或等于</span>
+                <span v-if='item.判断.条件 == "="'>等于</span>
+                &nbsp;{{item.判断.基准值}} 时
+              </td>
+              <td>{{item.流程}}</td>
+            </tr>
+          </tbody>
+        </table>
+          <div v-if='template.状态 == 0'>
+            <button class="btn btn-primary" v-on:click='submit()'>发布</button>
+            <button class="btn btn-default">归档</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

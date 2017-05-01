@@ -9,16 +9,16 @@ var templatedetail = new Vue({
     },
     submit: function(){
       var data = {
-        专案ID: getUrlParam('id')
+        模板ID: getUrlParam('id')
       }
       var options = {
         "Content-Type": "application/json"
       }
-      /*projectdetail.$http.post('/api/project/submitproject', data, options).then(res => {
-        window.location = '/project/detail?id='+getUrlParam('id')+'&tip=project-new-2'
+      templatedetail.$http.post('/api/project/publishtemplate', data, options).then(res => {
+        window.location = '/project/template/detail?id='+getUrlParam('id')+'&tip=template-submit-1'
       },res=>{
         modal.$data.showModal('无法提交专案', '错误是' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
-      })*/
+      })
     }
   }
 })
@@ -32,10 +32,13 @@ function getUrlParam(name) {
 
 function getDetail() {
   templatedetail.$http.get('/api/project/gettemplatedetail?id=' + getUrlParam('id')).then(res => {
-    /*res.body.数据.申请时间 = moment(res.body.数据.申请时间).fromNow()
-    for (i in res.body.数据.流程历史) {
-      res.body.数据.流程历史[i].操作时间 = moment(res.body.数据.流程历史[i].操作时间).fromNow()
-    }*/
+    res.body.数据.创建时间 = moment(res.body.数据.创建时间).fromNow()
+    var 流程 = res.body.数据.流程
+    for (var i in 流程) {
+      if(流程[i].判断 != '其他'){
+        流程[i].判断.字段 = res.body.数据.表字段[流程[i].判断.字段].名称
+      }
+    }
     templatedetail.$data.template = res.body.数据
   }, res => {
     modal.$data.showModal('无法获取模板详情', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')

@@ -1,0 +1,160 @@
+<html>
+
+<head>
+  <title>专案 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/home.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class='flex container'>
+    <div class='webhead' id='user'>
+      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
+      <div class="dropdown userinfo">
+        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="usermenu">
+            <li><a href="/signout">退出登录</a></li>
+          </ul>
+      </div>
+    </div>
+    <div class='main row'>
+      <div class='col-md-3'>
+        <div class="list-group"> <a href="/project" class="list-group-item">
+            专案列表
+          </a> <a href="/project/new" class="list-group-item">新建专案</a> <a href="/project/template" class="list-group-item">模板</a></div>
+      </div>
+      <div class='col-md-9 columnview'>
+        <div id='newtemplate' class='columnview'>
+          <h3>新建专案模板</h3>
+          <div class='columnview'>
+            <div class="form-group columnview">
+              <label for="field-title">模板标题</label>
+              <input class="form-control" id="field-title" v-model="templatetitle">
+              <p class="help-block">用简单的语言描述专案模板。</p>
+            </div>
+            <div class="form-group columnview">
+              <label for="field-des">描述</label>
+              <textarea class="form-control" rows="3" id='field-des' v-model="templatedescription"></textarea>
+              <p class="help-block">简述相应专案的作用、使用方法等。</p>
+            </div>
+            <label for="field-des">模板表单字段</label>
+            <div class='columnview'>
+              <div v-for='(field, index) in fields'>
+                <div class="form-inline">
+                  <div class="form-group">
+                    <input class="form-control" placeholder="字段名称" v-model="fields[index].名称"> </div>
+                  <div class="form-group">
+                    <input class="form-control" placeholder="字段说明" v-model="fields[index].描述"> </div>
+                  <div class="form-group">
+                    <select class="form-control" v-model="fields[index].类型">
+                      <option value='字段'>单行字段</option>
+                      <option value='文本'>多行文本</option>
+                      <option value='数字'>数字</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-default" v-on:click='delfield(index)'>删</button>
+                </div>
+              </div>
+              <div>
+                <button class='btn btn-default' v-on:click='addfield()'>新建一个字段</button>
+              </div>
+            </div>
+            <label for="field-des">专案路由</label>
+            <div class='columnview'>
+              <div v-for='(route, index) in routes' class='columnview'>
+                <p>第 {{index+1}} 顺位：</p>
+                <div> 当
+                  <div class="form-group">
+                    <select class="form-control" v-model="routes[index].判断.字段">
+                      <option v-for='(field, i) in fields' v-bind:value='i'>{{field.名称}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <select class="form-control" v-model="routes[index].判断.条件">
+                      <option value='='>等于</option>
+                      <option value='>'>大于</option>
+                      <option value='>='>大于或等于</option>
+                      <option value='<'>小于</option>
+                      <option value='<='>小于或等于</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <input class='form-control' v-model="routes[index].判断.基准值"> </div> 时， </div>
+                <p> 按此顺序步骤审核此专案： </p>
+                <div v-for='(step, j) in routes[index].流程'>
+                  <select class="form-control" v-model="routes[index].流程[j]">
+                    <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
+                  </select>
+                  <button class='btn btn-default' v-on:click='delstep(index,j)'>删</button>
+                </div>
+                <div> <a v-on:click='addstep(index)'>新增一个顺序步骤</a> </div>
+                <div>
+                  <button class="btn btn-default" v-on:click='delroute(index)'>删除第 {{index+1}} 顺位</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class='btn btn-default' v-on:click='addroute()'>新建一个路由顺位</button>
+          </div>
+          <label for="field-title">默认路由</label>
+          <p>提交专案时，系统会按照模板规定的顺位顺序依次判断，决定相应专案以何种路由进行提交。如果所有顺位条件都不符合，且开启了默认路由，则该专案将以默认路由的流程进行提交。</p>
+          <p>如果专案只有一个流程，那么建议<b>不设置顺位路由</b>，仅开启并设置默认路由。</p>
+          <p>如果不开启默认路由，请<b>确保所有顺位条件能够分流所有的专案</b>。</p>
+          <div class='columnview'>
+          <div class="checkbox">
+            <label><input type="checkbox" v-model='enabledefaultroute' v-on:click='defaultroutetrigger()'> 开启默认路由</label>
+            </div>
+            <div v-if='enabledefaultroute' class='columnview'>
+              <div v-for='(route, j) in defaultroute.流程'>
+                <select class="form-control" v-model="defaultroute.流程[j]">
+                    <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
+                  </select>
+                <button class='btn btn-default' v-on:click='delstep(index,j)'>删</button>
+              </div>
+              <div> <a v-on:click='addstepindefault()'>新增一个顺序步骤</a> </div>
+            </div>
+            
+          </div>
+          <button class='btn btn-primary' v-on:click='submit()'>填写完毕，提交模板</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{modalTitle}}</h4> </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</body>
+<!-- moment -->
+<script src="/resource/moment/min/moment-with-locales.min.js"></script>
+<!-- Vue JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<!-- 模态通知框 -->
+<script src='/public/js/modal.js'></script>
+<!-- 获取用户数据 -->
+<script src="/public/js/userinfo.js"></script>
+<!-- 新建模板 -->
+<script src="/public/js/newtemplate.js"></script>
+
+</html>
