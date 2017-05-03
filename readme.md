@@ -16,6 +16,8 @@
 
 想做小白鼠的 ~~谁想做啊~~ 可以 `git clone` 然后 `npm install` 一下，然后自己研究一下数据库代码，写一个数据库出来吧……
 
+API 文档可见 [这里](https://astrian.gitbooks.io/oa-nodejs-apidoc/)。
+
 额外感谢 @lsby 的帮助。
 
 （啊哈哈哈哈哈哈真是怠惰呢……）
