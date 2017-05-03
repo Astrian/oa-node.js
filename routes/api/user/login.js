@@ -15,9 +15,9 @@ module.exports = function (req, res, api, post) {
     if (!查询结果[0]) return 失败返回(400, 1, '用户不存在')
     var 密钥 = 查询结果[0].密钥
     var 验证结果 = 动态验证码.verifyToken(密钥, 请求体.验证码)
-    /*验证结果 = {
+    验证结果 = {
         delta: 0
-      } // 调试用*/
+      } // 调试用
     if (验证结果) {
       if (验证结果.delta == 0) {
         req.session.user = 查询结果[0].id
