@@ -179,13 +179,13 @@ router.get('/node/getnodelist', function (req, res, next) {
  * /notification
  * 获取通知
  */
-//获取通知
-router.get('/notification/getnotification', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.notificatio(req, res, api, post)
-    })
+// 获取通知
+ router.get('/notification/getnotification', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.notification.getnotification(req, res, api, post)
   })
+})
 /*
  * 公告
  * /announcement
