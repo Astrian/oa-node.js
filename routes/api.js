@@ -33,6 +33,7 @@ interface.node.getnodelist = require('./api/node/getnodelist')
 interface.notification.getnotification = require('./api/notification/getnotification')
 interface.announcement.send = require('./api/announcement/send')
 interface.announcement.getdetail = require('./api/announcement/getdetail')
+interface.announcement.getlist = require('./api/announcement/getlist')
   /*
    * 用户
    * /user
@@ -202,6 +203,13 @@ router.get('/announcement/getdetail', function (req, res, next) {
   var post = req.query
   run(req, res, {}, function (api) {
     interface.announcement.getdetail(req, res, api, post)
+  })
+})
+// 获取公告列表
+router.get('/announcement/getlist', function (req, res, next) {
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.announcement.getlist(req, res, api, post)
   })
 })
 function run(req, res, opt, fun) {

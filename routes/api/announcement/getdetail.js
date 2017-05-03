@@ -33,7 +33,6 @@ module.exports = function (req, res, api, 请求体) {
       SQL语句 = 'SELECT 姓, 名, 头像 FROM user WHERE id = ' + 登录用户
       已读清单 = [(yield 调用数据库(SQL语句, 回调.next))[0]].concat(已读清单)
       已读清单[0].时间 = new Date().getTime()
-      debug(已读清单[0])
     }
     SQL语句 = 'SELECT 姓, 名, 头像 FROM user WHERE id = ' + 请求结果.发布者
     var 发布者 = (yield 调用数据库(SQL语句, 回调.next))[0]
