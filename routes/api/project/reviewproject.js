@@ -37,7 +37,7 @@ module.exports = function (req, res, api, 请求体) {
         }
         SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，流程将继续交由 '+流程[专案.路由].流程[(专案.进度 + 1)]+' 处理。", false, '+new Date().getTime()+')'
         yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，正提交下一步审核。", false, '+new Date().getTime()+')'
+        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，正提交下一步审核。", false, '+new Date().getTime()+')'
         yield 调用数据库(SQL语句, 回调.next)
         SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并同意该专案。", ' + new Date().getTime() + ')'
         yield 调用数据库(SQL语句, 回调.next)
