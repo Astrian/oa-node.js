@@ -20,6 +20,7 @@
 .avatar{
   width: 30px;
   height: 30px;
+  margin-right: 5px;
 }
 .userinfo{
   align-items: center;
@@ -137,4 +138,11 @@ a:hover{
 }
 body{
   padding-bottom: 30px;
+}
+.announcementbody{
+  font-size: 16px;
+}
+.readlist-cell{
+  margin-top: 8px;
+  align-items: center;
 }

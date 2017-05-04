@@ -1,6 +1,7 @@
 var debug = require('debug')('oa:api/announcement/send');
 var 调用数据库 = require('../../modules/Db').exec
 var 回调函数是一个反人类的东西 = require('sync_back').run
+var markdown = require('markdown')
 var 空 = null
 module.exports = function (req, res, api, 请求体) {
   回调函数是一个反人类的东西(function* (回调) {
@@ -36,6 +37,7 @@ module.exports = function (req, res, api, 请求体) {
     }
     SQL语句 = 'SELECT 姓, 名, 头像 FROM user WHERE id = ' + 请求结果.发布者
     var 发布者 = (yield 调用数据库(SQL语句, 回调.next))[0]
+    请求结果.正文 = markdown.markdown.toHTML(请求结果.正文)
     请求结果.发布者 = 发布者
     请求结果.已读清单 = 已读清单
     成功返回(请求结果)

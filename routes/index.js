@@ -46,5 +46,9 @@ router.get('/announcement', function(req, res, next) {
   if (req.session.user != null) res.render('announcement-index');
   else res.redirect('/')
 });
+router.get('/announcement/detail', function(req, res, next) {
+  if (req.session.user != null) res.render('announcement-detail');
+  else res.redirect('/')
+});
 
 module.exports = router;
