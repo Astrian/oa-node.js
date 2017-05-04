@@ -4,7 +4,7 @@ var newannouncement = new Vue({
     preview: false,
     announcement: {
       标题: null,
-      正文: null,
+      正文: "",
       范围: null,
     },
     bodypreview: null,
