@@ -11,9 +11,6 @@ module.exports = function (req, res, api, post) {
     var SQL语句 = 'SELECT 用户名, 姓, 名, 头像, 所属部门, 帐户状态 FROM user WHERE id = '+登录用户
     var 调用结果 = yield 调用数据库(SQL语句, 回调.next)
     var 用户 = 调用结果[0]
-    var SQL语句 = 'SELECT 名称 FROM node WHERE id = '+用户.所属部门
-    var 调用结果 = yield 调用数据库(SQL语句, 回调.next)
-    用户.所属部门 = 调用结果[0].名称
     成功返回(用户)
   })
 }

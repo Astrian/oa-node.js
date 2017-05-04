@@ -12,7 +12,7 @@ function getAnnouncementList() {
     if(res == []){console.log('null')}
     if (res[0]) {
       for (var i in res) {
-        res[i].发布时间 = moment(res[i].申请时间).fromNow()
+        res[i].发布时间 = moment(res[i].发布时间).fromNow()
       }
       announcementlist.$data.announcementlist = res
     }

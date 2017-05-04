@@ -15,7 +15,7 @@ function getNotification(){
           res[i].类型 = 'project'
           break;
         case '公告':
-          res[i].类型 = 'notice'
+          res[i].类型 = 'announcement'
           break;
       }
       res[i].发送时间 = moment(res[i].发送时间, 'x').fromNow()

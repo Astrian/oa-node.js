@@ -1,0 +1,98 @@
+<html>
+
+<head>
+  <title>公告 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/home.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class='flex container'>
+    <div class='webhead' id='user'>
+      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
+      <div class="dropdown userinfo">
+        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="usermenu">
+            <li><a href="/signout">退出登录</a></li>
+          </ul>
+      </div>
+    </div>
+    <div class='main row'>
+      <div class='col-md-3'>
+        <div class="list-group"> <a href="/announcement" class="list-group-item">
+            公告列表
+          </a> <a href="/announcement/new" class="list-group-item active">发布公告</a></div>
+      </div>
+      <div class='col-md-9 columnview'>
+        <div id='tip'>
+          <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
+        </div>
+        <div id='newannouncement' class="columnview">
+          <h3>发布公告</h3>
+          <div class="form-group columnview">
+            <label for="ann-title">公告标题</label>
+            <input class="form-control" id="ann-title" v-model='announcement.标题'> </div>
+          <div class="form-group columnview">
+            <label for="ann-body">公告正文</label>
+            <div v-if='!preview' class='columnview'>
+              <textarea class="form-control" id='ann-body' rows="10" v-model='announcement.正文'></textarea>
+              <p class="help-block">支持使用 Markdown，不能使用 HTML 代码。<a href='#' v-on:click='triggerpreview(true)'>预览</a></p>
+            </div>
+            <div v-else class='columnview'>
+              <div v-html='bodypreview' class='columnview'></div>
+              <p class="help-block">这是公告发布后的效果。<a href='#' v-on:click='triggerpreview(false)'>返回编辑</a></p>
+            </div>
+          </div>
+          <div class="form-group columnview">
+            <label for="ann-body">范围</label>
+            <select class="form-control" v-model='announcement.范围'>
+              <option value='1'>部门内可见</option>
+              <option value='2'>全公司可见</option>
+            </select>
+          </div>
+          <div>
+          <button class='btn btn-primary' v-on:click='postannouncement()'>发布公告</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{modalTitle}}</h4> </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</body>
+<!-- moment -->
+<script src="/resource/moment/min/moment-with-locales.min.js"></script>
+<!-- Vue JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<!-- 模态通知框 -->
+<script src='/public/js/modal.js'></script>
+<!-- 获取用户数据 -->
+<script src="/public/js/userinfo.js"></script>
+<!-- 提示框 -->
+<script src="/public/js/tips.js"></script>
+<!-- Markdown 解析器 -->
+<script src="/resource/markdown/lib/markdown.js"></script>
+<!-- 新公告 -->
+<script src="/public/js/newannouncement.js"></script>
+</html>

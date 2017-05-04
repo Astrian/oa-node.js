@@ -17,7 +17,7 @@ function getannouncement(){
   var id = getUrlParam('id')
   announcementdetail.$http.get('/api/announcement/getdetail?id='+id).then(res => {
     res = (JSON.parse(res.bodyText)).数据
-    res.发布时间 = moment(res.申请时间).fromNow()
+    res.发布时间 = moment(res.发布时间).fromNow()
     for (var i in res.已读清单){
       console.log(res.已读清单[i].时间)
       res.已读清单[i].时间 = moment(res.已读清单[i].时间).fromNow()
