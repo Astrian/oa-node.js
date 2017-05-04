@@ -42,7 +42,7 @@ module.exports = function (req, res, api, 请求体) {
     }
     var SQL语句 = 'SELECT 所属部门 FROM user WHERE id = '+登录用户
     var 所属部门 = (yield 调用数据库(SQL语句, 回调.next))[0].所属部门
-    SQL语句 = 'SELECT 是人事部 FROM node WHERE id = '所属部门
+    SQL语句 = 'SELECT 是人事部 FROM node WHERE id = '+所属部门
     if(!((yield 调用数据库(SQL语句, 回调.next))[0].是人事部)) return 失败返回(401, 0, "当前用户不是人事部人员。")
     SQL语句 = "INSERT INTO project_temple (标题, 描述, 表字段, 流程, 状态, 创建者, 创建时间) VALUES ('" + 请求体.标题 + "', '" + 请求体.描述 + "','" + JSON.stringify(请求体.表单内容) + "', '" + JSON.stringify(请求体.流程) + "', 0, "+req.session.user+", " + new Date().getTime() + " )";
     var 数据库结果 = yield 调用数据库.exec(SQL语句, 回调.next)

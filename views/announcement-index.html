@@ -24,9 +24,10 @@
     </div>
     <div class='main row'>
       <div class='col-md-3'>
-        <div class="list-group"> <a href="/announcement" class="list-group-item active">
-            公告列表
-          </a> <a href="/announcement/new" class="list-group-item">发布公告</a></div>
+        <div class="list-group" id='menu'>
+          <a href="/announcement" class="list-group-item active">公告列表</a> 
+          <a href="/announcement/new" class="list-group-item" v-if='(user.所属部门.是人事部) || (user.所属部门.部门经理ID == user.id)'>发布公告</a>
+        </div>
       </div>
       <div class='col-md-9 columnview'>
         <div id='tip'>
@@ -79,5 +80,6 @@
 <script src="/public/js/tips.js"></script>
 <!-- 获取公告列表 -->
 <script src="/public/js/announcementlist.js"></script>
-
+<!-- 菜单 -->
+<script src="/public/js/menu.js"></script>
 </html>

@@ -24,9 +24,10 @@
     </div>
     <div class='main row'>
       <div class='col-md-3'>
-        <div class="list-group"> <a href="/project" class="list-group-item">
-            专案列表
-          </a> <a href="/project/new" class="list-group-item">新建专案</a> <a href="/project/template" class="list-group-item">模板</a></div>
+        <div class="list-group" id='menu'>
+          <a href="/project" class="list-group-item">专案列表</a>
+          <a href="/project/new" class="list-group-item">新建专案</a>
+          <a href="/project/template" class="list-group-item active" v-if='(user.所属部门.是人事部) || (user.帐户状态 == 2)'>模板</a></div>
       </div>
       <div class='col-md-9 columnview'>
         <div id='newtemplate' class='columnview'>
@@ -156,5 +157,6 @@
 <script src="/public/js/userinfo.js"></script>
 <!-- 新建模板 -->
 <script src="/public/js/newtemplate.js"></script>
-
+<!-- 菜单 -->
+<script src="/public/js/menu.js"></script>
 </html>

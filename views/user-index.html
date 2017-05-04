@@ -23,10 +23,10 @@
       </div>
     </div>
     <div class='main row'>
-      <div class='col-md-3'>
-        <div class="list-group"> <a href="/user" class="list-group-item active">
-            所有同事
-          </a> <a href="/user/new" class="list-group-item">创建新帐户</a></div>
+      <div class='col-md-3' id='menu'>
+        <div class="list-group"> 
+          <a href="/user" class="list-group-item active">所有同事</a>
+          <a href="/user/new" class="list-group-item" v-if='user.所属部门.是人事部'>创建新帐户</a></div>
       </div>
       <div class='col-md-9 columnview'>
         <div id='userlist' class='columnview'>
@@ -37,7 +37,6 @@
                 <th>用户名</th>
                 <th>邮箱</th>
                 <th>所属部门</th>
-                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -46,7 +45,6 @@
                 <td>{{user.用户名}}</td>
                 <td>{{user.邮箱}}</td>
                 <td>{{user.所属部门.名称}}</td>
-                <td><a href='#'>挂失</a></td>
               </tr>
             </tbody>
           </table>
@@ -84,5 +82,6 @@
 <script src="/public/js/userinfo.js"></script>
 <!-- 获取所有同事列表 -->
 <script src="/public/js/getuserlist.js"></script>
-
+<!-- 菜单 -->
+<script src="/public/js/menu.js"></script>
 </html>

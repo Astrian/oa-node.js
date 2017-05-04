@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class='main row'>
-      <div class='manupanel col-md-8'>
+      <div class='manupanel col-md-8' id='menu'>
         <div class="function-title">功能表</div>
         <a href='/project'>
         <div class='menu-cell'>
@@ -49,12 +49,14 @@
           <div class='menu-cell-text'> <span class='menu-cell-title'>人事</span> <span class='menu-cell-description'>管理企业员工，及其系统帐户。</span> </div>
         </div>
         </a>
-        <div class='menu-cell'>
-          <div>
-            <image src='/public/images/people.svg' class='home-icon'></image>
+        <a v-if='user.帐户状态 == 2'>
+          <div class='menu-cell'>
+            <div>
+              <image src='/public/images/people.svg' class='home-icon'></image>
+            </div>
+            <div class='menu-cell-text'> <span class='menu-cell-title'>部门</span> <span class='menu-cell-description'>管理企业架构与节点关系。</span> </div>
           </div>
-          <div class='menu-cell-text'> <span class='menu-cell-title'>部门</span> <span class='menu-cell-description'>管理企业架构与节点关系。</span> </div>
-        </div>
+        </a>
       </div>
       <div class='notification col-md-4'>
         <div class="panel panel-default">
@@ -114,5 +116,6 @@
 <script src="/public/js/userinfo.js"></script>
 <!-- 获取通知数据 -->
 <script src='/public/js/notification.js'></script>
-
+<!-- 菜单 -->
+<script src="/public/js/menu.js"></script>
 </html>
