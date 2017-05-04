@@ -6,6 +6,7 @@ module.exports = function (req, res, api, 请求体) {
   回调函数是一个反人类的东西(function* (回调) {
     var 失败返回 = api.back4Fail
     var 成功返回 = api.back4Success
+    var 登录用户 = req.session.user
     if (!请求体.标题 || 请求体.标题 == '') return 失败返回(400, 0, "标题未填写。")
     if (!请求体.描述 || 请求体.描述 == '') return 失败返回(400, 0, "描述未填写。")
     if (!请求体.表单内容) return 失败返回(400, 0, "缺少字段。")
@@ -39,7 +40,11 @@ module.exports = function (req, res, api, 请求体) {
       if (!字段.描述 || 字段.描述 == '') return 失败返回(400, 3, "流程不完整。")
       if (!字段.类型 || 字段.类型 == '') return 失败返回(400, 3, "流程不完整。")
     }
-    var SQL语句 = "INSERT INTO project_temple (标题, 描述, 表字段, 流程, 状态, 创建者, 创建时间) VALUES ('" + 请求体.标题 + "', '" + 请求体.描述 + "','" + JSON.stringify(请求体.表单内容) + "', '" + JSON.stringify(请求体.流程) + "', 0, "+req.session.user+", " + new Date().getTime() + " )";
+    var SQL语句 = 'SELECT 所属部门 FROM user WHERE id = '+登录用户
+    var 所属部门 = (yield 调用数据库(SQL语句, 回调.next))[0].所属部门
+    SQL语句 = 'SELECT 是人事部 FROM node WHERE id = '所属部门
+    if(!((yield 调用数据库(SQL语句, 回调.next))[0].是人事部)) return 失败返回(401, 0, "当前用户不是人事部人员。")
+    SQL语句 = "INSERT INTO project_temple (标题, 描述, 表字段, 流程, 状态, 创建者, 创建时间) VALUES ('" + 请求体.标题 + "', '" + 请求体.描述 + "','" + JSON.stringify(请求体.表单内容) + "', '" + JSON.stringify(请求体.流程) + "', 0, "+req.session.user+", " + new Date().getTime() + " )";
     var 数据库结果 = yield 调用数据库.exec(SQL语句, 回调.next)
     成功返回({
       表单ID: 数据库结果.insertId
