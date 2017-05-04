@@ -13,6 +13,7 @@ module.exports = function (req, res, api, post) {
     var 数据库结果 = yield 调用数据库(SQL语句,回调值.next) 
     var 用户
     if(!数据库结果[0]) return 失败返回(400, 1, '用户名不存在。')
+    if(数据库结果[0].帐户状态 != 0) return 失败返回(400, 2, '帐户不在恢复状态')
     else 用户 = 数据库结果[0]
     SQL语句 = 'SELECT * FROM user_recovery WHERE id = '+用户.id+' AND 密钥 = "'+请求体.恢复密钥+'"'
     var 数据库结果 = yield 调用数据库(SQL语句,回调值.next)
