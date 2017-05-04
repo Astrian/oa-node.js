@@ -31,7 +31,7 @@ var recovery = new Vue({
         恢复密钥: recovery.$data.code,
         动态验证码: recovery.$data.authcode
       }
-      recovery.$http.post('/api/user/recovery', data, options).then(res => {
+      recovery.$http.post('/api/user/confirmtoken', data, options).then(res => {
         window.location = '/home'
       },res=>{
         modal.$data.showModal('无法完成操作', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')

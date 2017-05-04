@@ -24,8 +24,8 @@ module.exports = function (req, res, api, post) {
       if (验证结果.delta == 0) {
         req.session.user = 用户.id
         SQL语句 = 'DELETE FROM user_recovery WHERE id = ' + 用户.id
-        yield 调用数据库(SQL语句, 回调值.next)
         debug(SQL语句)
+        yield 调用数据库(SQL语句, 回调值.next)
         return 成功返回(空)
       }
       else return 失败返回(500, 0, '未知的服务器错误。')
