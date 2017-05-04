@@ -28,6 +28,7 @@ interface.user.confirmtoken = require('./api/user/confirmtoken')
 interface.user.login = require('./api/user/login')
 interface.user.signout = require('./api/user/signout')
 interface.user.getinfo = require('./api/user/getinfo')
+interface.user.getlist = require('./api/user/getlist')
 interface.node.newnode = require('./api/node/newnode')
 interface.node.getnodelist = require('./api/node/getnodelist')
 interface.notification.getnotification = require('./api/notification/getnotification')
@@ -87,131 +88,139 @@ router.post('/user/newuser', function (req, res, next) {
       interface.user.newuser(req, res, api, post)
     })
   })
-/*
- * 专案
- * /project
- * 包括专案模板和专案本身的操作接口。
- */
-// 新建专案模板
+  // 获取所有用户列表
+router.get('/user/getlist', function (req, res, next) {
+    var post = req.body
+    run(req, res, {}, function (api) {
+      interface.user.getlist(req, res, api, post)
+    })
+  })
+  /*
+   * 专案
+   * /project
+   * 包括专案模板和专案本身的操作接口。
+   */
+  // 新建专案模板
 router.post('/project/newtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.newtemplate(req, res, api, post)
     })
   })
-// 发布专案模板
+  // 发布专案模板
 router.post('/project/publishtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.publishtemplate(req, res, api, post)
     })
   })
-// 新建专案
+  // 新建专案
 router.post('/project/newproject', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.newproject(req, res, api, post)
     })
   })
-// 将专案提交审核
+  // 将专案提交审核
 router.post('/project/submitproject', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.submitproject(req, res, api, post)
     })
   })
-// 审核专案
+  // 审核专案
 router.post('/project/reviewproject', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.reviewproject(req, res, api, post)
     })
   })
-// 获取专案列表
+  // 获取专案列表
 router.get('/project/getprojectlist', function (req, res, next) {
     var post = req.query
     run(req, res, {}, function (api) {
       interface.project.getprojectlist(req, res, api, post)
     })
   })
-// 获取专案详情
+  // 获取专案详情
 router.get('/project/getprojectdetail', function (req, res, next) {
     var post = req.query
     run(req, res, {}, function (api) {
       interface.project.getprojectdetail(req, res, api, post)
     })
   })
-// 获取模板列表
+  // 获取模板列表
 router.get('/project/gettemplatelist', function (req, res, next) {
     var post = req.query
     run(req, res, {}, function (api) {
       interface.project.gettemplatelist(req, res, api, post)
     })
   })
-// 获取模板详情
+  // 获取模板详情
 router.get('/project/gettemplatedetail', function (req, res, next) {
     var post = req.query
     run(req, res, {}, function (api) {
       interface.project.gettemplatedetail(req, res, api, post)
     })
   })
-/*
- * 部门
- * /node
- * 包括部门管理和查询接口
- */
-// 创建新部门
+  /*
+   * 部门
+   * /node
+   * 包括部门管理和查询接口
+   */
+  // 创建新部门
 router.post('/node/newnode', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.node.newnode(req, res, api, post)
     })
   })
-// 获取所有部门的列表
+  // 获取所有部门的列表
 router.get('/node/getnodelist', function (req, res, next) {
     var post = req.query
     run(req, res, {}, function (api) {
       interface.node.getnodelist(req, res, api, post)
     })
   })
-/*
- * 通知
- * /notification
- * 获取通知
- */
-// 获取通知
- router.get('/notification/getnotification', function (req, res, next) {
-  var post = req.body
-  run(req, res, {}, function (api) {
-    interface.notification.getnotification(req, res, api, post)
+  /*
+   * 通知
+   * /notification
+   * 获取通知
+   */
+  // 获取通知
+router.get('/notification/getnotification', function (req, res, next) {
+    var post = req.body
+    run(req, res, {}, function (api) {
+      interface.notification.getnotification(req, res, api, post)
+    })
   })
-})
-/*
- * 公告
- * /announcement
- * 公司内的公告系统
- */
-//发布公告
+  /*
+   * 公告
+   * /announcement
+   * 公司内的公告系统
+   */
+  //发布公告
 router.post('/announcement/send', function (req, res, next) {
-  var post = req.body
-  run(req, res, {}, function (api) {
-    interface.announcement.send(req, res, api, post)
+    var post = req.body
+    run(req, res, {}, function (api) {
+      interface.announcement.send(req, res, api, post)
+    })
   })
-})
-//获取公告详情
+  //获取公告详情
 router.get('/announcement/getdetail', function (req, res, next) {
-  var post = req.query
-  run(req, res, {}, function (api) {
-    interface.announcement.getdetail(req, res, api, post)
+    var post = req.query
+    run(req, res, {}, function (api) {
+      interface.announcement.getdetail(req, res, api, post)
+    })
   })
-})
-// 获取公告列表
+  // 获取公告列表
 router.get('/announcement/getlist', function (req, res, next) {
   var post = req.query
   run(req, res, {}, function (api) {
     interface.announcement.getlist(req, res, api, post)
   })
 })
+
 function run(req, res, opt, fun) {
   sync(function* (api) {
     var needLogin = opt.login != null ? opt.login : true

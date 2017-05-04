@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <title>人事 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/home.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class='flex container'>
+    <div class='webhead' id='user'>
+      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
+      <div class="dropdown userinfo">
+        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="usermenu">
+            <li><a href="/signout">退出登录</a></li>
+          </ul>
+      </div>
+    </div>
+    <div class='main row'>
+      <div class='col-md-3'>
+        <div class="list-group"> <a href="/user" class="list-group-item">
+            所有同事
+          </a> <a href="/user/new" class="list-group-item active">创建新帐户</a></div>
+      </div>
+      <div class='col-md-9 columnview'>
+        <div id='getrecoverycode' class='columnview'>
+          <h3>获取恢复密钥</h3>
+          <p>帐户已进入恢复模式。请将新建的用户名（如果是新建帐户的操作），以及以下恢复密钥提交给相应同事：</p>
+          <p class='code'>{{code}}</p>
+          <p>在登录界面，点击「进入帐户恢复流程」，开始恢复帐户。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{modalTitle}}</h4> </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</body>
+<!-- moment -->
+<script src="/resource/moment/min/moment-with-locales.min.js"></script>
+<!-- Vue JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<!-- 模态通知框 -->
+<script src='/public/js/modal.js'></script>
+<!-- 获取用户数据 -->
+<script src="/public/js/userinfo.js"></script>
+<!-- 获取所有同事列表 -->
+<script src="/public/js/getrecoverycode.js"></script>
+
+</html>

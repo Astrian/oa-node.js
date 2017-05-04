@@ -5,6 +5,10 @@ router.get('/', function(req, res, next) {
   if (req.session.user == null) res.render('index');
   else res.redirect('/home')
 });
+router.get('/recovery', function(req, res, next) {
+  if (req.session.user == null) res.render('index-recovery');
+  else res.redirect('/home')
+});
 
 router.get('/home', function(req, res, next) {
   if (req.session.user != null) res.render('home');
@@ -52,6 +56,18 @@ router.get('/announcement/detail', function(req, res, next) {
 });
 router.get('/announcement/new', function(req, res, next) {
   if (req.session.user != null) res.render('announcement-new');
+  else res.redirect('/')
+});
+router.get('/user', function(req, res, next) {
+  if (req.session.user != null) res.render('user-index');
+  else res.redirect('/')
+});
+router.get('/user/new', function(req, res, next) {
+  if (req.session.user != null) res.render('user-new');
+  else res.redirect('/')
+});
+router.get('/user/getrecoverycode', function(req, res, next) {
+  if (req.session.user != null) res.render('user-getrecoverycode');
   else res.redirect('/')
 });
 

@@ -1,0 +1,75 @@
+<html>
+
+<head>
+  <title>恢复帐户 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/index.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div id='vue'>
+    <div class="loginscreen">
+      <div class='loginscreen-body'>
+        <p><span class="login-title-text">恢复流程</span></p>
+        <div class="loginmodal">
+          <div v-if='step == 1'>
+            <p>若您还未向人事部门人员获取临时登录密钥，请联系您企业的人事部门。</p>
+            <div class="form-group">
+              <label for="form-username">用户名</label>
+              <input type="email" class="form-control" id="form-username" v-model='username'> </div>
+            <div class="form-group">
+              <label for="form-code">临时登录密钥</label>
+              <input type="email" class="form-control" id="form-code" v-model='code'> </div>
+            <div>
+              <button class='btn btn-primary' v-on:click='submitstep1()'>继续</button>
+            </div>
+          </div>
+          <div v-if='step == 2'>
+            <p>现在，请下载 Google Authenticator 验证器（<a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8'>iOS</a> / <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Android</a>），扫描以下二维码。</p>
+            <p><image v-bind:src='"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+qrcode' class='qrcode'></image></p>
+            <p>添加帐户后，请键入生成的动态口令，确定您的帐户已设置成功。</p>
+            <div class="form-group">
+              <label for="form-code1">动态口令</label>
+              <input type="email" class="form-control" id="form-code1" v-model='authcode'> </div>
+            <div>
+              <button class='btn btn-primary' v-on:click='submitstep2()'>完成</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="credit">
+        <div>Image Credit (C) Jackson Jost</div>
+      </div>
+    </div>
+    <!-- /.modal -->
+  </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{modalTitle}}</h4> </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</body>
+<!-- Vue 和页面 JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<!-- 模态通知框 -->
+<script src='/public/js/modal.js'></script>
+<script src="/public/js/recovery.js"></script>
+</html>
