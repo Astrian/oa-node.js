@@ -34,6 +34,7 @@
         </div>
         <div id='announcementdetail' class="columnview">
           <h1>{{detail.标题}}</h1>
+          <div class='announcement-metainfo'><image v-bind:src='detail.发布者.头像' class='avatar img-circle'></image> {{detail.发布者.姓}}{{detail.发布者.姓}} 发布于 {{detail.发布时间}}</div>
           <div v-html="detail.正文" class='columnview announcementbody'></div>
           <hr>
           <div class='columnview'>
