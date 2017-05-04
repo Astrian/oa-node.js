@@ -13,7 +13,7 @@ module.exports = function (req, res, api, post) {
     var SQL语句 = 'SELECT 密钥, id, 帐户状态 FROM user WHERE 用户名 = "' + 请求体.用户名 + '"'
     var 查询结果 = yield 调用数据库(SQL语句, back.next)
     if (!查询结果[0]) return 失败返回(400, 1, '用户不存在')
-    if (查询结果[0].帐户状态 != 1 || 查询结果[0].帐户状态 != 2) return 失败返回(400, 2, '帐户状态不正常')
+    if (查询结果[0].帐户状态 != 1 && 查询结果[0].帐户状态 != 2) return 失败返回(400, 2, '帐户状态不正常')
     var 密钥 = 查询结果[0].密钥
     var 验证结果 = 动态验证码.verifyToken(密钥, 请求体.验证码)
     验证结果 = {

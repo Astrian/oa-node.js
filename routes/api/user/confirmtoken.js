@@ -26,7 +26,7 @@ module.exports = function (req, res, api, post) {
         req.session.user = 用户.id
         SQL语句 = 'DELETE FROM user_recovery WHERE id = ' + 用户.id
         yield 调用数据库(SQL语句, 回调值.next)
-        SQL语句 = 'UPDATE user SET 庄户状态 = 1 WHERE id = '+用户.id
+        SQL语句 = 'UPDATE user SET 帐户状态 = 1 WHERE id = '+用户.id
         yield 调用数据库(SQL语句, 回调值.next)
         return 成功返回(空)
       }
