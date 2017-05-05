@@ -70,5 +70,12 @@ router.get('/user/getrecoverycode', function(req, res, next) {
   if (req.session.user != null) res.render('user-getrecoverycode');
   else res.redirect('/')
 });
-
+router.get('/node', function(req, res, next) {
+  if (req.session.user != null) res.render('node-index');
+  else res.redirect('/')
+});
+router.get('/node/new', function(req, res, next) {
+  if (req.session.user != null) res.render('node-new');
+  else res.redirect('/')
+});
 module.exports = router;

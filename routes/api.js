@@ -31,6 +31,7 @@ interface.user.getinfo = require('./api/user/getinfo')
 interface.user.getlist = require('./api/user/getlist')
 interface.node.newnode = require('./api/node/newnode')
 interface.node.getnodelist = require('./api/node/getnodelist')
+interface.node.getnodesheet = require('./api/node/getnodesheet')
 interface.notification.getnotification = require('./api/notification/getnotification')
 interface.announcement.send = require('./api/announcement/send')
 interface.announcement.getdetail = require('./api/announcement/getdetail')
@@ -175,11 +176,18 @@ router.post('/node/newnode', function (req, res, next) {
       interface.node.newnode(req, res, api, post)
     })
   })
-  // 获取所有部门的列表
+  // 获取所有部门的名称
 router.get('/node/getnodelist', function (req, res, next) {
     var post = req.query
     run(req, res, {}, function (api) {
       interface.node.getnodelist(req, res, api, post)
+    })
+  })
+//获取所有部门列表
+router.get('/node/getnodesheet', function (req, res, next) {
+    var post = req.query
+    run(req, res, {}, function (api) {
+      interface.node.getnodesheet(req, res, api, post)
     })
   })
   /*
