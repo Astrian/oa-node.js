@@ -7,6 +7,7 @@ var newuser = new Vue({
       邮箱: "",
       姓: "",
       名: "",
+      头像: "",
       所属部门: null
     },
     nodes: [],

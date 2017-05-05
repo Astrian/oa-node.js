@@ -48,6 +48,10 @@
             <input type="email" class="form-control" id="form-email" v-model='user.邮箱'>
           </div>
           <div class="form-group columnview">
+            <label for="form-email">头像</label>
+            <input type="email" class="form-control" id="form-email" v-model='user.头像'>
+          </div>
+          <div class="form-group columnview">
             <label for="form-node">所属部门</label>
             <select class="form-control" id='form-node' v-model='user.所属部门'>
               <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
