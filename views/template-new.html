@@ -89,6 +89,7 @@
                 <p> 按此顺序步骤审核此专案： </p>
                 <div v-for='(step, j) in routes[index].流程'>
                   <select class="form-control" v-model="routes[index].流程[j]">
+                    <option v-if='j != 0' value=-1>当上一步骤处理的部门选择通过专案时，由其决定此步骤</option>
                     <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
                   </select>
                   <button class='btn btn-default' v-on:click='delstep(index,j)'>删</button>
@@ -114,6 +115,7 @@
             <div v-if='enabledefaultroute' class='columnview'>
               <div v-for='(route, j) in defaultroute.流程'>
                 <select class="form-control" v-model="defaultroute.流程[j]">
+                  <option v-if='j != 0' value=-1>当上一步骤处理的部门选择通过专案时，由其决定此步骤</option>
                     <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
                   </select>
                 <button class='btn btn-default' v-on:click='delstep(index,j)'>删</button>

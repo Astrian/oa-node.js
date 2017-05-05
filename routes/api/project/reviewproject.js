@@ -24,7 +24,26 @@ module.exports = function (req, res, api, 请求体) {
     SQL语句 = 'SELECT * FROM user WHERE id = ' + 专案.申请人
     var 提交者 = yield 调用数据库(SQL语句, 回调.next)
     if (请求体.操作 == '同意') {
-      if (流程[专案.路由].流程[(专案.进度 + 1)]) {
+      if(流程[专案.路由].流程[(专案.进度 + 1)] == "-1"){
+         if(!请求体.下一步 || 请求体.下一步 == '') return 失败返回(409,0,'')
+         SQL语句 = 'SELECT id,父级部门ID FROM node WHERE 名称 = "' + 请求体.下一步 + '"'
+         调用结果 = yield 调用数据库(SQL语句, 回调.next)
+         if(调用结果[0].父级部门ID != 所属部门) return 失败返回(400, 4, '下一步指定的部门不是当前用户所在部门的子部门。')
+         SQL语句 = 'UPDATE project SET 进度 = ' + ((专案.进度) + 1) + ', 目前处理的部门 = ' + 调用结果[0].id + ' WHERE id = ' + 专案.id
+         yield 调用数据库(SQL语句, 回调.next)
+         SQL语句 = 'SELECT * FROM user WHERE 所属部门 = ' + 调用结果[0].id
+         var 通知者 = yield 调用数据库(SQL语句, 回调.next)
+         for (var i in 通知者) {
+           SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 通知者[i].id + ', ' + 专案.id + ', "专案", "由 ' + (提交者[0].姓).concat(提交者[0].名) + ' 提交的专案正等待处理。", false, '+new Date().getTime()+')'
+           yield 调用数据库(SQL语句, 回调.next)
+         }
+        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，流程将继续交由 '+流程[专案.路由].流程[(专案.进度 + 1)]+' 处理。", false, '+new Date().getTime()+')'
+        yield 调用数据库(SQL语句, 回调.next)
+        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，正提交下一步审核。", false, '+new Date().getTime()+')'
+        yield 调用数据库(SQL语句, 回调.next)
+        SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并同意该专案。", ' + new Date().getTime() + ')'
+        yield 调用数据库(SQL语句, 回调.next)
+      }else if (流程[专案.路由].流程[(专案.进度 + 1)]) {
         SQL语句 = 'SELECT id FROM node WHERE 名称 = "' + 流程[专案.路由].流程[(专案.进度 + 1)] + '"'
         调用结果 = yield 调用数据库(SQL语句, 回调.next)
         SQL语句 = 'UPDATE project SET 进度 = ' + ((专案.进度) + 1) + ', 目前处理的部门 = ' + 调用结果[0].id + ' WHERE id = ' + 专案.id
@@ -52,12 +71,15 @@ module.exports = function (req, res, api, 请求体) {
       }
     }
     else if (请求体.操作 == '拒绝') {
+      if(!请求体.说明 || 请求体.说明 == '') return 失败返回(400, 0, '操作为拒绝，但没有附说明。')
       SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已被 ' + 流程[专案.路由].流程[(专案.进度)] + ' 拒绝，请在修改后重新提交。", false, '+new Date().getTime()+')'
       yield 调用数据库(SQL语句, 回调.next)
       SQL语句 = 'UPDATE project SET 进度 = null, 状态 = 0, 路由 = null, 目前处理的部门 = null WHERE id = ' + 专案.id
       yield 调用数据库(SQL语句, 回调.next)
-      SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并拒绝该专案。", ' + new Date().getTime() + ')'
+      SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并拒绝该专案，附加说明：'+请求体.说明+'。", ' + new Date().getTime() + ')'
       yield 调用数据库(SQL语句, 回调.next)
+    }else{
+      return 失败返回(400, 3, '操作不合法。')
     }
     成功返回(空)
   })

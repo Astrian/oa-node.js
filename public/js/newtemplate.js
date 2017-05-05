@@ -67,7 +67,8 @@ var newtemplate = new Vue({
       this.$http.post('/api/project/newtemplate', data, options).then(response => {
         window.location = '/project/template/detail?tip=template-submit-2&id='+response.body.数据.表单ID
       }, response => {
-        modal.$data.showModal('无法新建模板', '因为 ' + response.body.错误描述 + '（代码：' + res.body.错误码 + '）。')
+        console.log(response)
+        modal.$data.showModal('无法新建模板', '因为 ' + response.body.错误描述 + '（代码：' + response.body.错误码 + '）。')
       });
     }
   }

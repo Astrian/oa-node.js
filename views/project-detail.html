@@ -80,8 +80,31 @@
             <button class="btn btn-default">归档</button>
           </div>
           <div v-else-if='(permission == "审核") && (project.状态 == 1)'>
-            <button class="btn btn-default" v-on:click="review('同意')">同意该专案</button>
-            <button class="btn btn-default" v-on:click="review('拒绝')">拒绝</button>
+            <div v-if='showreviewops == 0'>
+              <button class="btn btn-default" v-on:click="review('同意')">同意该专案</button>
+              <button class="btn btn-default" v-on:click="gotoview(1)">拒绝</button>
+            </div>
+            <div v-else-if='showreviewops == 1' class='columnview'>
+              <div class="form-group columnview">
+                <label for="form-des">附加说明</label>
+                <input class="form-control" id="form-des" v-model='state'>
+              </div>
+              <div>
+                <button class="btn btn-default" v-on:click="review('拒绝')">确认拒绝</button>
+                <button class="btn btn-default" v-on:click="gotoview(0)">返回</button>
+              </div>
+            </div>
+            <div v-else-if='showreviewops == 2'>
+              <div class="form-group columnview">
+                <label for="form-next">该专案接下来应该交给谁审核？</label>
+                <select class="form-control" v-model='next'>
+                  <option v-for='item in nodes' v-bind:value='item'>{{item}}</option>
+                </select>
+                <div>
+                  <button class='btn btn-default' v-on:click="review('同意')">确认</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
