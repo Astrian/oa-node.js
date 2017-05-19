@@ -7,23 +7,28 @@
 
 - 凯斯卓
 	- 用户名：`Kestrel`
-	- 密钥：使用验证器扫描以下 QR 码：![Kestrel 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/kestrel-qr.png)
+	- 密钥：使用验证器扫描以下 QR 码：
+    ![Kestrel 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/kestrel-qr.png)
 	- 用户身份：人事部部门经理 / 系统管理员（可新建专案模板和流程）
 - 林戈
 	- 用户名：`Ringo`
-	- 密钥：使用验证器扫描以下 QR 码：![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/ringo-qr.png)
+	- 密钥：使用验证器扫描以下 QR 码：
+    ![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/ringo-qr.png)
 	- 用户身份：总经办部门经理
 - 塞穆尔
 	- 用户名：`Samuel`
-	- 密钥：密钥：使用验证器扫描以下 QR 码：![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/samuel-qr.png)
+	- 密钥：使用验证器扫描以下 QR 码：
+    ![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/samuel-qr.png)
 	- 用户身份：开发部部门经理
 - 兰斯
 	- 用户名：`Lance`
-	- 密钥：使用验证器扫描以下 QR 码：![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/lance-qr.png)
+	- 密钥：使用验证器扫描以下 QR 码：
+    ![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/lance-qr.png)
 	- 用户身份：聊天软件开发小组组长（部门经理）
 - 奥佐
 	- 用户名：`Ozo`
-	- 密钥：使用验证器扫描以下 QR 码：![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/ozo-qr.png)
+	- 密钥：使用验证器扫描以下 QR 码：
+    ![Ringo 的密钥图片]( https://cdn.astrianzheng.cn/special/oanodejs/ozo-qr.png)
 	- 用户身份：聊天软件开发小组组员
 
 ## 体验方法
@@ -38,11 +43,15 @@
 
 # 本地安装方法
 
-- 安装 Node.js。[在这里可以安装](https://nodejs.org)
+- 安装 Node.js 以及 MySQL。[在这里可以安装](https://nodejs.org)
 - `git clone https://github.com/Astrian/oa-node.js.git oa`
 - `cd oa`
 - `npm install`
 - `npm debug run`
+- 配置环境
+  - 创建 `oa` 数据库
+  - 执行数据库表创建语句
+  - 修改 `/routes/modules/Db.js`，将数据库相关信息写入
 
 有关数据库创建的语句：
 
