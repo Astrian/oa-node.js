@@ -244,8 +244,8 @@ function run(req, res, opt, fun) {
 
     function successBack(data) {
       var json = {}
-      json.状态 = '成功'
-      if (data != null) json.数据 = data
+      json.status = 'Success'
+      if (data != null) json.data = data
       res.writeHead(200, {
         'Content-Type': 'application/json;charset=utf-8'
       });
@@ -254,9 +254,9 @@ function run(req, res, opt, fun) {
 
     function failBack(httpCode, code, des) {
       var json = {}
-      json.状态 = '失败'
-      json.错误码 = code
-      json.错误描述 = des
+      json.status = 'Fail'
+      json.code = code
+      json.description = des
       res.writeHead(httpCode, {
         'Content-Type': 'application/json;charset=utf-8'
       });

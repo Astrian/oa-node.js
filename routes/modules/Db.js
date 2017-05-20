@@ -4,7 +4,7 @@ var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'root',
-  database: 'oa',
+  database: 'oa-new',
   charset: 'utf8mb4_unicode_ci'
 });
 exports.exec = function (sql, back) {
