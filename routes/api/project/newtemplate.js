@@ -1,54 +1,27 @@
-var 调用数据库 = require('../../modules/Db').exec
+var opsDb = require('../../modules/Db').exec
 var debug = require('debug')('oa: api/project/newtemplate');
-var 回调函数是一个反人类的东西 = require('sync_back').run
-var 类型判断 = require('util')
-module.exports = function (req, res, api, 请求体) {
-  回调函数是一个反人类的东西(function* (回调) {
-    var 失败返回 = api.back4Fail
-    var 成功返回 = api.back4Success
-    var 登录用户 = req.session.user
-    var SQL语句 = 'SELECT 所属部门,帐户状态 FROM user WHERE id = '+登录用户
-    var 登录用户信息 = (yield 调用数据库(SQL语句, 回调.next))[0]
-    SQL语句 = 'SELECT 是人事部 FROM node WHERE id = '+登录用户信息.所属部门
-    var 是人事部 = (yield 调用数据库(SQL语句, 回调.next))[0].是人事部
-    if(!是人事部 && 登录用户信息.帐户状态!=2) return 失败返回(401,0,"当前登录用户无权使用本接口。")
-    if (!请求体.标题 || 请求体.标题 == '') return 失败返回(400, 0, "标题未填写。")
-    if (!请求体.描述 || 请求体.描述 == '') return 失败返回(400, 0, "描述未填写。")
-    if (!请求体.表单内容) return 失败返回(400, 0, "缺少字段。")
-    if (!请求体.流程) return 失败返回(400, 0, "缺少流程。")
-    var 流程 = 请求体.流程;
-    for (var i in 流程) {
-      if (!流程[i] || 流程[i] == '') return 失败返回(400, 3, "流程不完整。")
-      var 判断值TOF = '';
-      if (类型判断.isObject(流程[i].判断)) {
-        switch (流程[i].判断.条件) {
-          case '<':
-          case '<=':
-          case '>':
-          case '>=':
-            if (请求体.表单内容[流程[i].判断.字段].类型 != '数字') 判断值TOF = '字段有错误：判断值不是有效的符号。';
-          case '=': break;
-          default: 判断值TOF = '字段有错误：判断值不是有效的符号。'
-        }
+var cleanCallback = require('sync_back').run
+var typeJudger = require('util')
+module.exports = function (req, res, api, reqBody) {
+  cleanCallback(function* (callbackApi) {
+    var callback4Fail = api.back4Fail
+    var callback4Success = api.back4Success
+    var loginUID = req.session.user
+    var SQLOps = 'SELECT 所属部门,帐户状态 FROM user WHERE id = '+loginUID
+    var loginUserInfo = (yield opsDb(SQLOps, callbackApi.next))[0]
+    SQLOps = 'SELECT 是人事部 FROM node WHERE id = '+loginUserInfo.所属部门
+    var isPersonnel = (yield opsDb(SQLOps, callbackApi.next))[0].是人事部
+    if(!isPersonnel && loginUserInfo.帐户状态!=2) return callback4Fail(401,0,"当前登录用户无权使用本接口。")
+    if (!reqBody.title || reqBody.title == '') return callback4Fail(400, 0, "标题未填写。")
+    if (!reqBody.description || reqBody.description == '') return callback4Fail(400, 0, "描述未填写。")
+    if (!reqBody.sheets) return callback4Fail(400, 0, "缺少字段。")
+    else{
+      for(var i in reqBody.sheets){
+        if(!(reqBody.sheets[i].title) || reqBody.sheets[i].title == "" || !(typeJudger.isString(reqBody.sheets[i].title))) return callback4Fail(400,0,"字段标题不是字符串。")
+        if(!(reqBody.sheets[i].description) || reqBody.sheets[i].description == "" || !(typeJudger.isString(reqBody.sheets[i].description))) return callback4Fail(400,0,"字段描述不是字符串。")
+        if(!(typeJudger.isObject(reqBody.sheets[i].type)) && reqBody.sheets[i].type != "number" && reqBody.sheets[i].type != "string" && reqBody.sheets[i].type != 'text' ) return callback4Fail(400,0,"字段类型不正确。")
       }
-      else if(类型判断.isString(流程[i].判断)) {
-        if (流程[i].判断 != "其他") 判断值TOF = '字段有错误：判断值不应该是一个不正确的字符串。'
-      }
-      else 判断值TOF = '字段有错误：判断对象不正确。'
-      if (判断值TOF != '') return 失败返回(400, 4, 判断值TOF)
     }
-    var 表单 = 请求体.表单内容
-    for (var j in 表单) {
-      if (表单[j] == '') return 失败返回(400, 3, "流程不完整。")
-      var 字段 = 表单[j]
-      if (!字段.名称 || 字段.名称 == '') return 失败返回(400, 3, "流程不完整。")
-      if (!字段.描述 || 字段.描述 == '') return 失败返回(400, 3, "流程不完整。")
-      if (!字段.类型 || 字段.类型 == '') return 失败返回(400, 3, "流程不完整。")
-    }
-    SQL语句 = "INSERT INTO project_temple (标题, 描述, 表字段, 流程, 状态, 创建者, 创建时间) VALUES ('" + 请求体.标题 + "', '" + 请求体.描述 + "','" + JSON.stringify(请求体.表单内容) + "', '" + JSON.stringify(请求体.流程) + "', 0, "+req.session.user+", " + new Date().getTime() + " )";
-    var 数据库结果 = yield 调用数据库(SQL语句, 回调.next)
-    成功返回({
-      表单ID: 数据库结果.insertId
-    })
+    callback4Success(null)
   })
 }
