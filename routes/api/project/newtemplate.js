@@ -19,7 +19,7 @@ module.exports = function (req, res, api, reqBody) {
       for(var i in reqBody.sheets){
         if(!(reqBody.sheets[i].title) || reqBody.sheets[i].title == "" || !(typeJudger.isString(reqBody.sheets[i].title))) return callback4Fail(400,0,"字段标题不是字符串。")
         if(!(reqBody.sheets[i].description) || reqBody.sheets[i].description == "" || !(typeJudger.isString(reqBody.sheets[i].description))) return callback4Fail(400,0,"字段描述不是字符串。")
-        if(!(typeJudger.isObject(reqBody.sheets[i].type)) && reqBody.sheets[i].type != "number" && reqBody.sheets[i].type != "string" && reqBody.sheets[i].type != 'text' ) return callback4Fail(400,0,"字段类型不正确。")
+        if(!(typeJudger.isArray(reqBody.sheets[i].type)) && reqBody.sheets[i].type != "number" && reqBody.sheets[i].type != "string" && reqBody.sheets[i].type != 'text' ) return callback4Fail(400,0,"字段类型不正确。")
       }
     }
     SQLOps = "INSERT INTO project_temple (title, description, sheets, status, creator, createat) VALUES ('"+reqBody.title+"',  '"+reqBody.description+"',  '"+JSON.stringify(reqBody.sheets)+"', 0, '"+loginUID+"', "+new Date().getTime()+")"
