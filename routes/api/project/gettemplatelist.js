@@ -14,7 +14,7 @@ module.exports = function (req, res, api, reqBody) {
       var dbResult = yield dbOps(SQLStatement, callback.next);
       return return4Success(dbResult)
     }else if (reqBody.type == 2) {
-      SQLStatement = 'SELECT id, title, description FROM project_temple WHERE creator = '+loginUID
+      SQLStatement = 'SELECT id, title, description, status FROM project_temple WHERE creator = '+loginUID
       debug(SQLStatement)
       var dbResult = yield dbOps(SQLStatement, callback.next);
       return return4Success(dbResult)

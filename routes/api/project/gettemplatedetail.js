@@ -8,7 +8,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
   var loginUID = req.session.user
   var SQLStatement = 'SELECT * FROM project_temple WHERE (status = 1 OR creator = '+loginUID+') AND id = '+reqBody.id
   var result = yield dbOps(SQLStatement, callback.next)
-  if(!result[0]) return return4Fail(404,0,'专案不存在，或不是当前用户创建。')
+  if(!result[0]) return return4Fail(404,0,'专案不存在，或当前用户无权查看该模板信息。')
   result = result[0]
   result.sheets = JSON.parse(result.sheets)
   return4Success(result)
