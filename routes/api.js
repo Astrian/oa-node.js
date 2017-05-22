@@ -22,6 +22,7 @@ interface.project.getprojectlist = require('./api/project/getprojectlist')
 interface.project.getprojectdetail = require('./api/project/getprojectdetail')
 interface.project.gettemplatelist = require('./api/project/gettemplatelist')
 interface.project.gettemplatedetail = require('./api/project/gettemplatedetail')
+interface.project.newflow = require('./api/project/newflow')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
@@ -113,6 +114,13 @@ router.post('/project/publishtemplate', function (req, res, next) {
     var post = req.body
     run(req, res, {}, function (api) {
       interface.project.publishtemplate(req, res, api, post)
+    })
+  })
+  // 新建流程
+router.post('/project/newflow', function (req, res, next) {
+    var post = req.body
+    run(req, res, {}, function (api) {
+      interface.project.newflow(req, res, api, post)
     })
   })
   // 新建专案
