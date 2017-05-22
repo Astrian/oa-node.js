@@ -23,6 +23,7 @@ interface.project.getprojectdetail = require('./api/project/getprojectdetail')
 interface.project.gettemplatelist = require('./api/project/gettemplatelist')
 interface.project.gettemplatedetail = require('./api/project/gettemplatedetail')
 interface.project.newflow = require('./api/project/newflow')
+interface.project.bind = require('./api/project/bind')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
 interface.user.confirmtoken = require('./api/user/confirmtoken')
@@ -123,6 +124,13 @@ router.post('/project/newflow', function (req, res, next) {
       interface.project.newflow(req, res, api, post)
     })
   })
+// 绑定模板与流程
+  router.post('/project/bind', function (req, res, next) {
+      var post = req.body
+      run(req, res, {}, function (api) {
+        interface.project.bind(req, res, api, post)
+      })
+    })
   // 新建专案
 router.post('/project/newproject', function (req, res, next) {
     var post = req.body
