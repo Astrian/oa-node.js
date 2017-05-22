@@ -2,7 +2,6 @@ var debug = require('debug')('oa: api/project/newtemplate');
 var dbOps = require('../../modules/Db').exec
 var cleanCallback = require('sync_back').run
 var typeJudger = require('util')
-var 空 = null
 
 module.exports = function (req, res, api, reqBody) {cleanCallback (function *(callback){
   var return4Fail = api.back4Fail
