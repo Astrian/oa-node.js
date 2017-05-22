@@ -10,6 +10,15 @@ module.exports = function (req, res, api, reqBody) {cleanCallback (function *(ca
   var loginUID = req.session.user
   if(!reqBody.template || reqBody.template == '') return return4Fail(400, 3, '未填写模板 ID。')
   if(!reqBody.data || reqBody.data == '') return return4Fail(400, 3, '无数据。')
+  if(!reqBody.priority) reqBody.priority = 2
+  switch(reqBody.priority){
+    case 1:
+    case 2:
+    case 3:
+      break
+    default:
+      return return4Fail(400, 4, '优先级值有误')
+  }
   var SQLStatement = 'SELECT * FROM project_temple WHERE status = 1 AND id = '+reqBody.template
   var result = yield dbOps(SQLStatement, callback.next)
   if(!result[0]) return return4Fail(404,1,'模板不存在（ID 错误），或尚未发布。')
@@ -28,7 +37,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback (function *(ca
         if(!typeJudger.isNumber(data[i])) return4Fail(400,1,'第 '+((+i)+1)+ ' 位数据应该是一个文本，但它是一个数字。')
     }
   }
-  SQLStatement = "INSERT INTO project (applyer, submittime, template, data, status) VALUES ('"+loginUID+"', '"+new Date().getTime()+"','"+reqBody.template+"','"+JSON.stringify(reqBody.data)+"', -1)"
+  SQLStatement = "INSERT INTO project (applyer, submittime, template, data, status, priority) VALUES ('"+loginUID+"', '"+new Date().getTime()+"','"+reqBody.template+"','"+JSON.stringify(reqBody.data)+"', -1, "+reqBody.priority+")"
   result = yield dbOps(SQLStatement, callback.next)
   return4Success({
     id: result.insertId

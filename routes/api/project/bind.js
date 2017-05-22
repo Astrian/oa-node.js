@@ -23,16 +23,29 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
   for (var i in routes){
     if(typeJudger.isObject(routes[i].judge)){
       if(!sheets[routes[i].judge.field]) return return4Fail(400,2, "判断条件对应的模板字段不合要求。")
-      switch (routes[i].judge.condition){
-        case '>':
-        case '<':
-        case '>=':
-        case '<=':
-          if(sheets[routes[i].judge.field].type != 'number') return return4Fail(400,2, "判断条件对应的模板字段不合要求。")
-        case '=':
-          break;
-        default:
-          if(sheets[routes[i].judge.field].type != 'number') return return4Fail(400,3, "判断值不正确。")
+      if(routes[i].judge.field == 'priority'){
+        if(routes[i].judge.condition != '=') return return4Fail(400,2, "判断条件对应的模板字段不合要求。")
+        switch(routes[i].judge.value){
+          case 1:
+          case 2:
+          case 3:
+            break
+          default:
+            return return4Fail(400, 2, '优先级判断的基准值不正确。')
+            break
+        }
+      }else{
+        switch (routes[i].judge.condition){
+          case '>':
+          case '<':
+          case '>=':
+          case '<=':
+            if(sheets[routes[i].judge.field].type != 'number') return return4Fail(400,2, "判断条件对应的模板字段不合要求。")
+          case '=':
+            break;
+          default:
+            if(sheets[routes[i].judge.field].type != 'number') return return4Fail(400,3, "判断值不正确。")
+        }
       }
     }else if(routes[i].judge == 'other'){
       if(routes[(+i)+1]) return return4Fail(400,1, "「其他」后，不能有其他的路由判断条件。")
