@@ -1,86 +1,75 @@
-var 调用数据库 = require('../../modules/Db').exec
-var 回调函数是一个反人类的东西 = require('sync_back').run
+var dbOps = require('../../modules/Db').exec
+var cleanCallback = require('sync_back').run
 var debug = require('debug')('oa:api/project/reviewproject');
-var 空 = null
-module.exports = function (req, res, api, 请求体) {
-  回调函数是一个反人类的东西(function* (回调) {
-    var 成功返回 = api.back4Success
-    var 失败返回 = api.back4Fail
-    var 当前用户 = req.session.user
-    if (!请求体.专案ID || 请求体.专案ID == '') return 失败返回(400, 0, '未填写专案 ID。')
-    if (!请求体.操作 || 请求体.操作 == '') return 失败返回(400, 0, '未指定操作。')
-    if (请求体.操作 != '同意' && 请求体.操作 != '拒绝') return 失败返回(400, 1, '操作不合法。')
-    var SQL语句 = 'SELECT 所属部门 FROM user WHERE id = ' + 当前用户
-    var 调用结果 = yield 调用数据库(SQL语句, 回调.next)
-    var 所属部门 = 调用结果[0].所属部门
-    SQL语句 = 'SELECT * FROM project WHERE id = ' + 请求体.专案ID
-    调用结果 = yield 调用数据库(SQL语句, 回调.next)
-    if (调用结果[0].目前处理的部门 != 所属部门) return 失败返回(401, 0, '当前用户无权操作本专案。')
-    if (调用结果[0].状态 != 1) return 失败返回(400, 2, '专案目前不在审核状态。')
-    var 专案 = 调用结果[0]
-    SQL语句 = 'SELECT * FROM project_temple WHERE id = ' + 专案.模板
-    调用结果 = yield 调用数据库(SQL语句, 回调.next)
-    var 流程 = JSON.parse(调用结果[0].流程)
-    SQL语句 = 'SELECT * FROM user WHERE id = ' + 专案.申请人
-    var 提交者 = yield 调用数据库(SQL语句, 回调.next)
-    if (请求体.操作 == '同意') {
-      if(流程[专案.路由].流程[(专案.进度 + 1)] == "-1"){
-         if(!请求体.下一步 || 请求体.下一步 == '') return 失败返回(409,0,'')
-         SQL语句 = 'SELECT id,父级部门ID FROM node WHERE 名称 = "' + 请求体.下一步 + '"'
-         调用结果 = yield 调用数据库(SQL语句, 回调.next)
-         if(调用结果[0].父级部门ID != 所属部门) return 失败返回(400, 4, '下一步指定的部门不是当前用户所在部门的子部门。')
-         SQL语句 = 'UPDATE project SET 进度 = ' + ((专案.进度) + 1) + ', 目前处理的部门 = ' + 调用结果[0].id + ' WHERE id = ' + 专案.id
-         yield 调用数据库(SQL语句, 回调.next)
-         SQL语句 = 'SELECT * FROM user WHERE 所属部门 = ' + 调用结果[0].id
-         var 通知者 = yield 调用数据库(SQL语句, 回调.next)
-         for (var i in 通知者) {
-           SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 通知者[i].id + ', ' + 专案.id + ', "专案", "由 ' + (提交者[0].姓).concat(提交者[0].名) + ' 提交的专案正等待处理。", false, '+new Date().getTime()+')'
-           yield 调用数据库(SQL语句, 回调.next)
-         }
-        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，流程将继续交由 '+流程[专案.路由].流程[(专案.进度 + 1)]+' 处理。", false, '+new Date().getTime()+')'
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，正提交下一步审核。", false, '+new Date().getTime()+')'
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并同意该专案。", ' + new Date().getTime() + ')'
-        yield 调用数据库(SQL语句, 回调.next)
-      }else if (流程[专案.路由].流程[(专案.进度 + 1)]) {
-        SQL语句 = 'SELECT id FROM node WHERE 名称 = "' + 流程[专案.路由].流程[(专案.进度 + 1)] + '"'
-        调用结果 = yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'UPDATE project SET 进度 = ' + ((专案.进度) + 1) + ', 目前处理的部门 = ' + 调用结果[0].id + ' WHERE id = ' + 专案.id
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'SELECT * FROM user WHERE 所属部门 = ' + 调用结果[0].id
-        var 通知者 = yield 调用数据库(SQL语句, 回调.next)
-        for (var i in 通知者) {
-          SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 通知者[i].id + ', ' + 专案.id + ', "专案", "由 ' + (提交者[0].姓).concat(提交者[0].名) + ' 提交的专案正等待处理。", false, '+new Date().getTime()+')'
-          yield 调用数据库(SQL语句, 回调.next)
-        }
-        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，流程将继续交由 '+流程[专案.路由].流程[(专案.进度 + 1)]+' 处理。", false, '+new Date().getTime()+')'
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，正提交下一步审核。", false, '+new Date().getTime()+')'
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并同意该专案。", ' + new Date().getTime() + ')'
-        yield 调用数据库(SQL语句, 回调.next)
+var moment = require('moment')
+module.exports = function (req, res, api, reqBody) {cleanCallback(function* (callback) {
+  var time = new Date().getTime()
+  var return4Success = api.back4Success
+  var return4Fail = api.back4Fail
+  var loginUID = req.session.user
+  if (!reqBody.project || reqBody.project == '') return return4Fail(400, 0, '未填写专案 ID。')
+  if (!reqBody.operation || reqBody.operation == '') return return4Fail(400, 0, '未指定操作。')
+  var SQLStatement = 'SELECT * FROM project WHERE status <> -1 AND status <> -2 AND whoisprocessing = '+loginUID+' AND id = '+reqBody.project
+  var project = (yield dbOps(SQLStatement, callback.next))[0]
+  if(!project) return return4Fail(404, 0, '专案不存在（id 错误），或当前专案不应该由当前登录用户审核。')
+  project.data = JSON.parse(project.data)
+  SQLStatement = 'SELECT * FROM flow WHERE id = '+project.flow
+  var flow = (yield dbOps(SQLStatement, callback.next))[0]
+  flow.flow = JSON.parse(flow.flow)
+  SQLStatement = 'SELECT node,firstname,lastname FROM user WHERE id = '+loginUID
+  var loginUser = (yield dbOps(SQLStatement, callback.next))[0]
+  SQLStatement = 'SELECT id, firstname, lastname FROM user WHERE id = '+project.applyer
+  var applyer = (yield dbOps(SQLStatement, callback.next))[0]
+  SQLStatement = 'SELECT * FROM project_log WHERE project = '+reqBody.project
+  var opsHistory = yield dbOps(SQLStatement, callback.next)
+  var duration = time - opsHistory[(opsHistory.length)-1].time
+  switch(reqBody.operation){
+    case 'pass':
+      var nextProcesser
+      var nextStep
+      if(flow.flow[project.status+1] == -2){
+        if(!reqBody.next || reqBody.next == '') return return4Fail(409,0,'')
+        SQLStatement = 'SELECT node FROM use WHERE id = '+reqBody.next
+        var result = (yield dbOps(SQLStatement, callback.next))[0]
+        SQLStatement = 'SELECT * FROM node WHERE id = '+result.node
+        result =  (yield dbOps(SQLStatement, callback.next))[0]
+        if(result.parentnode != user.node) return return4Fail(400, 3, '下一步指定的流程人所在部门不是当前用户所在部门的子部门。')
+        nextProcesser = result.id
+        nextStep = (project.status)+1
+      }else if(!flow.flow[project.status+1]){
+        nextProcesser = "NULL"
+        nextStep = -3
+      }else{
+        nextProcesser = flow.flow[(+project.status)+1]
+        nextStep = (project.status)+1
       }
-      else {
-        SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已通过 ' + 流程[专案.路由].流程[(专案.进度)] + ' 审核，流程完毕。", false, '+new Date().getTime()+')'
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'UPDATE project SET 进度 = null, 状态 = -1 WHERE id = ' + 专案.id
-        yield 调用数据库(SQL语句, 回调.next)
-        SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并同意该专案，且专案流程完毕，自动归档。", ' + new Date().getTime() + ')'
-        yield 调用数据库(SQL语句, 回调.next)
+      if(nextStep == -3){
+        //流程已经结束
+      }else{
+        SQLStatement = 'UPDATE project SET status = '+nextStep+', whoisprocessing = '+nextProcesser+' WHERE id = '+project.id
+        yield dbOps(SQLStatement, callback.next)
+        SQLStatement = 'SELECT id, firstname, lastname FROM user where id = '+nextProcesser
+        nextProcesser = (yield dbOps(SQLStatement, callback.next))[0]
+        SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+nextProcesser.id+', '+reqBody.project+', "project", "由 '+applyer.firstname+applyer.lastname+' 提交的专案正等待审核。", 0, '+time+')'
+        yield dbOps(SQLStatement, callback.next)
+        SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+applyer.id+', '+reqBody.project+', "project", "您的专案已通过 '+loginUser.firstname+loginUser.lastname+' 审核，正提交至 '+nextProcesser.firstname+nextProcesser.lastname+' 审核。", 0, '+time+')'
+        yield dbOps(SQLStatement, callback.next)
+        // 转换为自然时间的时间段描述： debug(moment.duration(duration).humanize())
+        SQLStatement = 'INSERT INTO project_log (user, time, project, operation, flow, flowstep, duration) VALUES ('+loginUID+', '+time+', '+reqBody.project+', "审核并同意该专案。", '+flow.id+', '+((nextStep)-1)+','+duration+')'
+        yield dbOps(SQLStatement, callback.next)
       }
-    }
-    else if (请求体.操作 == '拒绝') {
-      if(!请求体.说明 || 请求体.说明 == '') return 失败返回(400, 0, '操作为拒绝，但没有附说明。')
-      SQL语句 = 'INSERT INTO notification (接收者, 连接至, 类型, 内容, 已读, 发送时间) VALUES (' + 提交者[0].id + ', ' + 专案.id + ', "专案", "您提交的专案已被 ' + 流程[专案.路由].流程[(专案.进度)] + ' 拒绝，请在修改后重新提交。", false, '+new Date().getTime()+')'
-      yield 调用数据库(SQL语句, 回调.next)
-      SQL语句 = 'UPDATE project SET 进度 = null, 状态 = 0, 路由 = null, 目前处理的部门 = null WHERE id = ' + 专案.id
-      yield 调用数据库(SQL语句, 回调.next)
-      SQL语句 = 'INSERT INTO project_log (专案ID, 操作人, 行为, 操作时间) VALUES (' + 专案.id + ', ' + 当前用户 + ', "审核并拒绝该专案，附加说明：'+请求体.说明+'。", ' + new Date().getTime() + ')'
-      yield 调用数据库(SQL语句, 回调.next)
-    }else{
-      return 失败返回(400, 3, '操作不合法。')
-    }
-    成功返回(空)
-  })
-}
+      break;
+    case 'refuse':
+      if(!reqBody.note || reqBody.note == '') return return4Fail(400,0,'未填写拒绝理由。')
+      SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+applyer.id+', '+reqBody.project+', "project", "您的专案被 '+loginUser.firstname+loginUser.lastname+' 审核，并被拒绝。", 0, '+time+')'
+      yield dbOps(SQLStatement, callback.next)
+      SQLStatement = 'UPDATE project SET status = -1, whoisprocessing = NULL, flow = NULL WHERE id = '+project.id
+      yield dbOps(SQLStatement, callback.next)
+      SQLStatement = 'INSERT INTO project_log (user, time, project, operation, flow, flowstep, duration) VALUES ('+loginUID+', '+time+', '+reqBody.project+', "审核并拒绝该专案，附加信息：'+reqBody.note+'。", '+flow.id+', '+project.status+','+duration+')'
+      yield dbOps(SQLStatement, callback.next)
+      break;
+    default:
+      return return4Fail(400, 1, '操作不合要求。')
+  }
+  return4Success(null)
+})}

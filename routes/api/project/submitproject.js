@@ -6,6 +6,8 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function*(call
   var loginUID = req.session.user
   var return4Success = api.back4Success
   var return4Fail = api.back4Fail
+  SQLStatement = 'SELECT node, firstname, lastname FROM user WHERE id = '+loginUID
+  var user = (yield dbOps(SQLStatement, callback.next))[0]
   if(!reqBody.project || reqBody.project == '') return return4Fail(400, 0, "未填写专案 ID。")
   var SQLStatement = 'SELECT * FROM project WHERE id = '+reqBody.project+' AND applyer = '+loginUID
   var result = (yield dbOps(SQLStatement, callback.next))[0]
@@ -41,9 +43,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function*(call
   var processer
   flow.flow = JSON.parse(flow.flow)
   if(flow.flow[0] == -1){
-    SQLStatement = 'SELECT node FROM user WHERE id = '+loginUID
-    result = (yield dbOps(SQLStatement, callback.next))[0].node
-    SQLStatement = 'SELECT * FROM node WHERE id = '+result
+    SQLStatement = 'SELECT * FROM node WHERE id = '+user.node
     processer = (yield dbOps(SQLStatement, callback.next))[0].manager
   }
   else{
@@ -54,7 +54,11 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function*(call
   else if(flow.status == 1) projectStatus = 0
   else return return4Fail(400, 3, "符合条件的流程状态不正确。")
   SQLStatement = 'UPDATE project SET whoisprocessing = '+processer+', status = '+projectStatus+', flow = '+flow.id+' WHERE id = '+reqBody.project
-  debug(SQLStatement)
+  yield dbOps(SQLStatement, callback.next)
+  SQLStatement = 'INSERT INTO project_log (user, time, project, operation, flow, flowstep) VALUES ('+loginUID+', '+new Date().getTime()+', '+reqBody.project+', "将专案提交至流程中", '+flow.id+', -1)'
+  yield dbOps(SQLStatement, callback.next)
+  SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+processer+', '+reqBody.project+', "project", "由 '+user.firstname+user.lastname+' 提交的专案正等待审核。", 0, '+new Date().getTime()+')'
+  yield dbOps(SQLStatement, callback.next)
   return4Success({
     status: projectStatus,
     flow: flow.id
