@@ -1,5 +1,7 @@
 # 在线体验方法
 
+**注：**该文档即将移动至 [GitBook](https://astrian.gitbooks.io/oa-nodejs-apidoc/content/installandexperment.html)，此文档将不再另作更新。
+
 [体验入口](https://oa-exp.astrianzheng.cn) 
 
 ## 体验帐户
