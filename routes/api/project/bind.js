@@ -39,6 +39,8 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
     }else{
       return return4Fail(400,0, "judge 值不符合要求。")
     }
+    SQLStatement = 'SELECT * FROM flow WHERE id = '+routes[i].flow
+    if(!(yield dbOps(SQLStatement, callback.next))[0]) return return4Fail(404,1, "一个或多个流程不存在。")
   }
 
   // 从数据库清空原有绑定数据
