@@ -44,7 +44,12 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
         nextStep = (project.status)+1
       }
       if(nextStep == -3){
-        //流程已经结束
+        SQLStatement = 'UPDATE project SET status = -3, whoisprocessing = NULL WHERE id = '+project.id
+        yield dbOps(SQLStatement, callback.next)
+        SQLStatement = 'INSERT INTO project_log (user, time, project, operation, flow, flowstep, duration) VALUES ('+loginUID+', '+time+', '+reqBody.project+', "审核并同意该专案，流程结束，流程自动归档。", '+flow.id+', '+((nextStep)-1)+','+duration+')'
+        yield dbOps(SQLStatement, callback.next)
+        SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+applyer.id+', '+reqBody.project+', "project", "您的专案已通过 '+loginUser.firstname+loginUser.lastname+' 审核，且流程已结束。", 0, '+time+')'
+        yield dbOps(SQLStatement, callback.next)
       }else{
         SQLStatement = 'UPDATE project SET status = '+nextStep+', whoisprocessing = '+nextProcesser+' WHERE id = '+project.id
         yield dbOps(SQLStatement, callback.next)
@@ -54,7 +59,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
         yield dbOps(SQLStatement, callback.next)
         SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+applyer.id+', '+reqBody.project+', "project", "您的专案已通过 '+loginUser.firstname+loginUser.lastname+' 审核，正提交至 '+nextProcesser.firstname+nextProcesser.lastname+' 审核。", 0, '+time+')'
         yield dbOps(SQLStatement, callback.next)
-        // 转换为自然时间的时间段描述： debug(moment.duration(duration).humanize())
+        // 转换为自然时间的时间段描述： moment.duration(duration).humanize()
         SQLStatement = 'INSERT INTO project_log (user, time, project, operation, flow, flowstep, duration) VALUES ('+loginUID+', '+time+', '+reqBody.project+', "审核并同意该专案。", '+flow.id+', '+((nextStep)-1)+','+duration+')'
         yield dbOps(SQLStatement, callback.next)
       }
@@ -63,7 +68,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
       if(!reqBody.note || reqBody.note == '') return return4Fail(400,0,'未填写拒绝理由。')
       SQLStatement = 'INSERT INTO notification (reciver, linkto, type, content, `read`, time) VALUES ('+applyer.id+', '+reqBody.project+', "project", "您的专案被 '+loginUser.firstname+loginUser.lastname+' 审核，并被拒绝。", 0, '+time+')'
       yield dbOps(SQLStatement, callback.next)
-      SQLStatement = 'UPDATE project SET status = -1, whoisprocessing = NULL, flow = NULL WHERE id = '+project.id
+      SQLStatement = 'UPDATE project SET status = -4, whoisprocessing = NULL, flow = NULL WHERE id = '+project.id
       yield dbOps(SQLStatement, callback.next)
       SQLStatement = 'INSERT INTO project_log (user, time, project, operation, flow, flowstep, duration) VALUES ('+loginUID+', '+time+', '+reqBody.project+', "审核并拒绝该专案，附加信息：'+reqBody.note+'。", '+flow.id+', '+project.status+','+duration+')'
       yield dbOps(SQLStatement, callback.next)
