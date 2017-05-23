@@ -12,7 +12,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function*(call
   var SQLStatement = 'SELECT * FROM project WHERE id = '+reqBody.project+' AND applyer = '+loginUID
   var result = (yield dbOps(SQLStatement, callback.next))[0]
   if (!result) return return4Fail(404,0, "专案不存在，或当前登录用户无权提交当前专案。")
-  if(result.status != -1 || result.status != -4) return return4Fail(400,1, "相应专案已被删除、归档，或已在审核状态（非草稿状态）。")
+  if(result.status != -1 && result.status != -4) return return4Fail(400,1, "相应专案已被删除、归档，或已在审核状态（非草稿状态）。")
   var project = result
   project.data = JSON.parse(project.data)
   SQLStatement = 'SELECT * FROM project_temple WHERE id = '+project.template
