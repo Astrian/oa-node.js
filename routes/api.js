@@ -23,6 +23,7 @@ interface.project.getprojectdetail = require('./api/project/getprojectdetail')
 interface.project.gettemplatelist = require('./api/project/gettemplatelist')
 interface.project.gettemplatedetail = require('./api/project/gettemplatedetail')
 interface.project.newflow = require('./api/project/newflow')
+interface.project.deltemplate = require('./api/project/deltemplate')
 interface.project.bind = require('./api/project/bind')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
@@ -45,167 +46,176 @@ interface.announcement.getlist = require('./api/announcement/getlist')
    */
   // 用户登录
 router.post('/user/login', function (req, res, next) {
-    var post = req.body
-    run(req, res, {
-      'login': false
-    }, function (api) {
-      interface.user.login(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {
+    'login': false
+  }, function (api) {
+    interface.user.login(req, res, api, post)
   })
-  // 注销登录
+})
+// 注销登录
 router.get('/user/signout', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.user.signout(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.user.signout(req, res, api, post)
   })
-  //获取登录用户信息
+})
+//获取登录用户信息
 router.get('/user/getinfo', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.user.getinfo(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.user.getinfo(req, res, api, post)
   })
-  // 重置动态验证码
+})
+// 重置动态验证码
 router.post('/user/recovery', function (req, res, next) {
-    var post = req.body
-    run(req, res, {
-      login: false
-    }, function (api) {
-      interface.user.recovery(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {
+    login: false
+  }, function (api) {
+    interface.user.recovery(req, res, api, post)
   })
-  // 确认重置动态验证码
+})
+// 确认重置动态验证码
 router.post('/user/confirmtoken', function (req, res, next) {
-    var post = req.body
-    run(req, res, {
-      login: false
-    }, function (api) {
-      interface.user.confirmtoken(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {
+    login: false
+  }, function (api) {
+    interface.user.confirmtoken(req, res, api, post)
   })
-  // 新建用户
+})
+// 新建用户
 router.post('/user/newuser', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.user.newuser(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.user.newuser(req, res, api, post)
   })
-  // 获取所有用户列表
+})
+// 获取所有用户列表
 router.get('/user/getlist', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.user.getlist(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.user.getlist(req, res, api, post)
   })
-  /*
-   * 专案
-   * /project
-   * 包括专案模板和专案本身的操作接口。
-   */
-  // 新建专案模板
+})
+/*
+ * 专案
+ * /project
+ * 包括专案模板和专案本身的操作接口。
+ */
+// 新建专案模板
 router.post('/project/newtemplate', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.newtemplate(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.newtemplate(req, res, api, post)
   })
-  // 发布专案模板
+})
+// 发布专案模板
 router.post('/project/publishtemplate', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.publishtemplate(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.publishtemplate(req, res, api, post)
   })
-  // 新建流程
+})
+// 新建流程
 router.post('/project/newflow', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.newflow(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.newflow(req, res, api, post)
   })
+})
 // 绑定模板与流程
-  router.post('/project/bind', function (req, res, next) {
-      var post = req.body
-      run(req, res, {}, function (api) {
-        interface.project.bind(req, res, api, post)
-      })
-    })
-  // 新建专案
+router.post('/project/bind', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.bind(req, res, api, post)
+  })
+})
+// 新建专案
 router.post('/project/newproject', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.newproject(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.newproject(req, res, api, post)
   })
-  // 将专案提交审核
+})
+// 将专案提交审核
 router.post('/project/submitproject', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.submitproject(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.submitproject(req, res, api, post)
   })
-  // 审核专案
+})
+// 审核专案
 router.post('/project/reviewproject', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.project.reviewproject(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.reviewproject(req, res, api, post)
   })
-  // 获取专案列表
+})
+// 删除 / 归档专案模板
+router.post('/project/deltemplate', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.deltemplate(req, res, api, post)
+    //api.back4Success(null)
+  })
+})
+// 获取专案列表
 router.get('/project/getprojectlist', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.project.getprojectlist(req, res, api, post)
-    })
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.getprojectlist(req, res, api, post)
   })
-  // 获取专案详情
+})
+// 获取专案详情
 router.get('/project/getprojectdetail', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.project.getprojectdetail(req, res, api, post)
-    })
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.getprojectdetail(req, res, api, post)
   })
-  // 获取模板列表
+})
+// 获取模板列表
 router.get('/project/gettemplatelist', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.project.gettemplatelist(req, res, api, post)
-    })
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.gettemplatelist(req, res, api, post)
   })
-  // 获取模板详情
+})
+// 获取模板详情
 router.get('/project/gettemplatedetail', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.project.gettemplatedetail(req, res, api, post)
-    })
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.gettemplatedetail(req, res, api, post)
   })
-  /*
-   * 部门
-   * /node
-   * 包括部门管理和查询接口
-   */
-  // 创建新部门
+})
+
+/*
+ * 部门
+ * /node
+ * 包括部门管理和查询接口
+ */
+// 创建新部门
 router.post('/node/newnode', function (req, res, next) {
-    var post = req.body
-    run(req, res, {}, function (api) {
-      interface.node.newnode(req, res, api, post)
-    })
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.node.newnode(req, res, api, post)
   })
-  // 获取所有部门的名称
+})
+// 获取所有部门的名称
 router.get('/node/getnodelist', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.node.getnodelist(req, res, api, post)
-    })
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.node.getnodelist(req, res, api, post)
   })
+})
 //获取所有部门列表
 router.get('/node/getnodesheet', function (req, res, next) {
-    var post = req.query
-    run(req, res, {}, function (api) {
-      interface.node.getnodesheet(req, res, api, post)
-    })
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.node.getnodesheet(req, res, api, post)
   })
+})
   /*
    * 通知
    * /notification
