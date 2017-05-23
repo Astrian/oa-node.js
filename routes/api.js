@@ -24,6 +24,7 @@ interface.project.gettemplatelist = require('./api/project/gettemplatelist')
 interface.project.gettemplatedetail = require('./api/project/gettemplatedetail')
 interface.project.newflow = require('./api/project/newflow')
 interface.project.deltemplate = require('./api/project/deltemplate')
+interface.project.delproject = require('./api/project/delproject')
 interface.project.bind = require('./api/project/bind')
 interface.user.newuser = require('./api/user/newuser')
 interface.user.recovery = require('./api/user/recovery')
@@ -158,7 +159,13 @@ router.post('/project/deltemplate', function (req, res, next) {
   var post = req.body
   run(req, res, {}, function (api) {
     interface.project.deltemplate(req, res, api, post)
-    //api.back4Success(null)
+  })
+})
+// 删除 / 归档专案
+router.post('/project/delproject', function (req, res, next) {
+  var post = req.body
+  run(req, res, {}, function (api) {
+    interface.project.delproject(req, res, api, post)
   })
 })
 // 获取专案列表
