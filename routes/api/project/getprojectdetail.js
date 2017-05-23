@@ -26,20 +26,23 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
       data: project.data[i]
     }
   }
-  SQLStatement = 'SELECT * FROM flow WHERE id = '+project.flow
-  project.flow = (yield dbOps(SQLStatement, callback.next))[0]
-  project.flow.flow = JSON.parse(project.flow.flow)
-  for(var i in project.flow.flow){
-    debug(project.flow.flow[i])
-    switch (project.flow.flow[i]){
-      case -1:
-      case -2:
-        break;
-      default:
-        SQLStatement = 'SELECT firstname, lastname, avatar, node FROM user WHERE id = '+project.flow.flow[i]
-        project.flow.flow[i] = (yield dbOps(SQLStatement, callback.next))[0]
-        SQLStatement = 'SELECT * FROM node where id = '+project.flow.flow[i].node
-        project.flow.flow[i].node = (yield dbOps(SQLStatement, callback.next))[0].name
+  if(project.flow){
+    SQLStatement = 'SELECT * FROM flow WHERE id = '+project.flow
+    project.flow = (yield dbOps(SQLStatement, callback.next))[0]
+    project.flow.flow = JSON.parse(project.flow.flow)
+
+    for(var i in project.flow.flow){
+      debug(project.flow.flow[i])
+      switch (project.flow.flow[i]){
+        case -1:
+        case -2:
+          break;
+        default:
+          SQLStatement = 'SELECT firstname, lastname, avatar, node FROM user WHERE id = '+project.flow.flow[i]
+          project.flow.flow[i] = (yield dbOps(SQLStatement, callback.next))[0]
+          SQLStatement = 'SELECT * FROM node where id = '+project.flow.flow[i].node
+          project.flow.flow[i].node = (yield dbOps(SQLStatement, callback.next))[0].name
+      }
     }
   }
   if(project.whoisprocessing){
