@@ -1,4 +1,4 @@
-var debug = require('debug')('oa:api/announcement/send');
+var debug = require('debug')('oa:api/announcement/getdetail');
 var dbOps = require('../../modules/Db').exec
 var cleanCallback = require('sync_back').run
 var markdown = require('markdown')
@@ -19,11 +19,13 @@ module.exports = function (req, res, api, reqBody) {
     }
     var readlist = JSON.parse(result.readlist)
     var iAmRead = false
-    for (var i in readlist) {
-      if (readlist[i].user == loginUID) iAmRead = true
-      SQLStatement = 'SELECT first, name, avatar FROM user WHERE id = ' + readlist[i].user
-      readlist[i] = (yield dbOps(SQLStatement, callback.next))[0]
-      readlist[i].time = JSON.parse(result.readlist)[i].time
+    if(readlist.length != 0){
+      for (var i in readlist) {
+        if (readlist[i].user == loginUID) {iAmRead = true}
+        SQLStatement = 'SELECT firstname, lastname, avatar FROM user WHERE id = ' + readlist[i].user
+        readlist[i].user = (yield dbOps(SQLStatement, callback.next))[0]
+        readlist[i].time = JSON.parse(result.readlist)[i].time
+      }
     }
     if (!iAmRead) {
       SQLStatement = "UPDATE announcements SET readlist  = '" + JSON.stringify([{
@@ -37,7 +39,7 @@ module.exports = function (req, res, api, reqBody) {
     }
     SQLStatement = 'SELECT firstname, lastname, avatar FROM user WHERE id = ' + result.publisher
     var publisher = (yield dbOps(SQLStatement, callback.next))[0]
-    result.body = markdown.markdown.toHTML(result.正文)
+    result.body = markdown.markdown.toHTML(result.body)
     result.publisher = publisher
     result.readlist = readlist
     return4Success(result)
