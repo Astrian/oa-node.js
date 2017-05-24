@@ -41,7 +41,7 @@
           <div v-if='fillproject' class='columnview'>
             <h3>{{template.title}}<span class='small'><br><br>{{template.description}}</span></h3>
             <div class='columnview'>
-              <div v-for='(field, index) in template.sheets'>
+              <div v-for='(field, index) in template.sheets' class='columnview'>
                 <div class="form-group columnview" v-if='field.type == "number"'>
                   <label v-bind:for='"field-"+index'>{{field.title}}</label>
                   <input type="number" class="form-control" v-bind:id='"field-"+index' v-model="project_fill[index]">

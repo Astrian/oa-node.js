@@ -23,6 +23,8 @@ interface.project.getprojectdetail = require('./api/project/getprojectdetail')
 interface.project.gettemplatelist = require('./api/project/gettemplatelist')
 interface.project.gettemplatedetail = require('./api/project/gettemplatedetail')
 interface.project.newflow = require('./api/project/newflow')
+interface.project.getflowlist = require('./api/project/getflowlist')
+interface.project.getflowdetail = require('./api/project/getflowdetail')
 interface.project.deltemplate = require('./api/project/deltemplate')
 interface.project.delproject = require('./api/project/delproject')
 interface.project.bind = require('./api/project/bind')
@@ -193,6 +195,20 @@ router.get('/project/gettemplatedetail', function (req, res, next) {
   var post = req.query
   run(req, res, {}, function (api) {
     interface.project.gettemplatedetail(req, res, api, post)
+  })
+})
+// 获取流程列表
+router.get('/project/getflowlist', function (req, res, next) {
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.getflowlist(req, res, api, post)
+  })
+})
+// 获取流程详情
+router.get('/project/getflowdetail', function (req, res, next) {
+  var post = req.query
+  run(req, res, {}, function (api) {
+    interface.project.getflowdetail(req, res, api, post)
   })
 })
 

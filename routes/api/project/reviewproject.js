@@ -29,12 +29,13 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
       var nextStep
       if(flow.flow[project.status+1] == -2){
         if(!reqBody.next || reqBody.next == '') return return4Fail(409,0,'')
-        SQLStatement = 'SELECT node FROM use WHERE id = '+reqBody.next
+        SQLStatement = 'SELECT node FROM user WHERE id = '+reqBody.next
+        debug(SQLStatement)
         var result = (yield dbOps(SQLStatement, callback.next))[0]
         SQLStatement = 'SELECT * FROM node WHERE id = '+result.node
-        result =  (yield dbOps(SQLStatement, callback.next))[0]
-        if(result.parentnode != user.node) return return4Fail(400, 3, '下一步指定的流程人所在部门不是当前用户所在部门的子部门。')
-        nextProcesser = result.id
+        targetNode =  (yield dbOps(SQLStatement, callback.next))[0]
+        if(result.parentnode != targetNode.node) return return4Fail(400, 3, '下一步指定的流程人所在部门不是当前用户所在部门的子部门。')
+        nextProcesser = reqBody.next
         nextStep = (project.status)+1
       }else if(!flow.flow[project.status+1]){
         nextProcesser = "NULL"

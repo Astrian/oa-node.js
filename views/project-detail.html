@@ -13,33 +13,28 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
-    </div>
+    <div class='webhead' id='user' v-html='userinfo'>
+   </div>
     <div class='main row'>
-      <div class='col-md-3'>
-        <div class="list-group" id='menu'>
-          <a href="/project" class="list-group-item">专案列表</a>
-          <a href="/project/new" class="list-group-item">新建专案</a>
-          <a href="/project/template" class="list-group-item" v-if='(user.所属部门.是人事部) || (user.帐户状态 == 2)'>模板</a></div>
+      <div class="col-md-3 list-group" id='menu'>
+        <a href="/project" class="list-group-item">专案列表</a>
+        <a href="/project/new" class="list-group-item">新建专案</a>
+        <a href="/project/template" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a>
+        <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a>
       </div>
       <div class='col-md-9 columnview'>
         <div id='tip'>
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
         <div id='projectdetail' class='columnview'>
-        <h2>{{project.模板}} 
-          <span v-if='project.状态 == 0' class="label label-warning">待提交</span> 
-          <span v-if='project.状态 == 1' class="label label-success">审核中</span> 
-          <span v-if='project.状态 == -1' class="label label-default">已归档</span> 
-          <small>由 {{project.申请人}} 在 {{project.申请时间}} 新建</small>
+        <h2>{{project.template.title}}
+          <span v-if='project.status == -1 || project.status == -4' class="label label-warning">待提交</span>
+          <span v-if='project.status == -2' class="label label-warning">被挂起</span>
+          <span v-if='project.status >= 0' class="label label-success">审核中</span>
+          <span v-if='project.status == -3' class="label label-default">已归档</span>
+          <small>由 {{project.applyer.firstname}}{{project.applyer.lastname}} 在 {{project.submittime}} 新建</small>
         </h2>
+        <h3>专案内容</h3>
         <table class="table">
           <thead>
             <tr>
@@ -48,14 +43,72 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for='item in project.数据'>
-              <td>{{item.名称}}</td>
-              <td>{{item.数据}}</td>
+            <tr v-for='item in project.data'>
+              <td>{{item.title}}</td>
+              <td>{{item.data}}</td>
             </tr>
           </tbody>
         </table>
-        <h3>专案操作历史</h3>
-        <div v-if='project.流程历史[0] != null'>
+        <h3>流程与进度</h3>
+        <div v-if='project.flow' class='columnview'>
+        <div><strong>该专案使用了「{{project.flow.title}}」流程</strong></div>
+        <div v-for='(item, index) in project.flow.flow'>
+          <div class='flowstep'>
+          <div v-if='item == -1'>
+            <div v-if='index == project.status'>
+              <div>
+                <image v-bind:src='project.whoisprocessing.avatar' class='avatar-medium img-circle'></image>
+              </div>
+              <div class='columnview'>
+                <div class='flow-username'>{{project.whoisprocessing.firstname}}{{project.whoisprocessing.lastname}}</div>
+                <div class='flow-second'>{{project.whoisprocessing.node}}&nbsp;&middot;&nbsp;申请人所在部门的经理&nbsp;&middot;&nbsp;<span class='flow-processing'>正在审核</span></div>
+              </div>
+            </div>
+            <div v-else>
+              <div>
+                <image src='/public/images/default-avatar.jpg' class='avatar-medium img-circle'></image>
+              </div>
+              <div class='columnview'>
+                <div class='flow-username'>申请人的部门经理</div>
+                <div class='flow-second'>第 {{index+1}} 步</div>
+              </div>
+            </div>
+          </div>
+          <div v-else-if='item == -2'>
+            <div v-if='index == project.status'>
+              <div>
+                <image v-bind:src='project.whoisprocessing.avatar' class='avatar-medium img-circle'></image>
+              </div>
+              <div class='columnview'>
+                <div class='flow-username'>{{project.whoisprocessing.firstname}}{{project.whoisprocessing.lastname}}</div>
+                <div class='flow-second'>{{project.whoisprocessing.node}}&nbsp;&middot;&nbsp;由上一步决定的流程负责人&nbsp;&middot;&nbsp;<span class='flow-processing'>正在审核</span></div>
+              </div>
+            </div>
+            <div v-else>
+              <div>
+                <image src='/public/images/default-avatar.jpg' class='avatar-medium img-circle'></image>
+              </div>
+              <div class='columnview'>
+                <div class='flow-username'>由上一步决定此步骤负责人</div>
+                <div class='flow-second'>第 {{index+1}} 步</div>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div>
+              <image v-bind:src='item.avatar' class='avatar-medium img-circle'></image>
+            </div>
+            <div class='columnview'>
+              <div class='flow-username'>{{item.firstname}}{{item.lastname}}</div>
+              <div class='flow-second'>{{item.node}}&nbsp;&middot;&nbsp;<span v-if='index != project.status'>第 {{index+1}} 步</span><span v-else class='flow-processing'>正在审核</span></div>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+        <div v-else>该专案尚未进入任何流程。</div>
+        <h3>操作历史</h3>
+        <div v-if='project.history[0] != null'>
           <table class="table">
             <thead>
               <tr>
@@ -65,24 +118,30 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for='item in project.流程历史'>
-                <td>{{item.操作时间}}</td>
-                <td>{{item.操作人}}</td>
-                <td>{{item.行为}}</td>
+              <tr v-for='item in project.history'>
+                <td>{{item.time}}</td>
+                <td>{{item.user.firstname}}{{item.user.lastname}}</td>
+                <td>{{item.operation}}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div v-else>该专案还没有任何操作历史。</div>
-        <div v-for='permission in project.操作权限'>
-          <div v-if='(permission == "申请") && (project.状态 == 0)'>
-            <button class="btn btn-default" v-on:click='submit()'>提交审核</button>
-            <button class="btn btn-default">归档</button>
+        <div v-for='permission in project.rights'>
+          <div class='columnview' v-if='(permission == "submitter") && (project.status == -1 || project.status == -4)'>
+            <h3>操作此专案</h3>
+            <div>
+              <button class="btn btn-default" v-on:click='submit()'>提交审核</button>
+              <button class="btn btn-default">归档</button>
+            </div>
           </div>
-          <div v-else-if='(permission == "审核") && (project.状态 == 1)'>
+          <div class='columnview' v-else-if='(permission == "processer") && (project.status >= 0)'>
+            <h3>操作此专案</h3>
             <div v-if='showreviewops == 0'>
-              <button class="btn btn-default" v-on:click="review('同意')">同意该专案</button>
-              <button class="btn btn-default" v-on:click="gotoview(1)">拒绝</button>
+              <div>
+                <button class="btn btn-default" v-on:click="review('pass')">同意该专案</button>
+                <button class="btn btn-default" v-on:click="gotoview(1)">拒绝</button>
+              </div>
             </div>
             <div v-else-if='showreviewops == 1' class='columnview'>
               <div class="form-group columnview">
@@ -90,7 +149,7 @@
                 <input class="form-control" id="form-des" v-model='state'>
               </div>
               <div>
-                <button class="btn btn-default" v-on:click="review('拒绝')">确认拒绝</button>
+                <button class="btn btn-default" v-on:click="review('refuse')">确认拒绝</button>
                 <button class="btn btn-default" v-on:click="gotoview(0)">返回</button>
               </div>
             </div>
@@ -98,10 +157,10 @@
               <div class="form-group columnview">
                 <label for="form-next">该专案接下来应该交给谁审核？</label>
                 <select class="form-control" v-model='next'>
-                  <option v-for='item in nodes' v-bind:value='item'>{{item}}</option>
+                  <option v-for='item in nodes' v-bind:value='item.id'>{{item.firstname}}{{item.lastname}}</option>
                 </select>
                 <div>
-                  <button class='btn btn-default' v-on:click="review('同意')">确认</button>
+                  <button class='btn btn-default' v-on:click="review('pass')">确认</button>
                 </div>
               </div>
             </div>

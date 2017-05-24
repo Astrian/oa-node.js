@@ -1,11 +1,8 @@
-.flex, .flex div{
+ .flex, .flex div{
   display: flex;
 }
 .webhead{
   margin-top: 40px;
-}
-.form-control{
-  display: block;
 }
 .website-name{
   font-size: 25px;
@@ -158,4 +155,22 @@ body{
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
+}
+.flowstep{
+  padding-top: 15px;
+  padding-bottom: 8px;
+}
+.avatar-medium{
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+.flow-username{
+  font-size:18px;
+}
+.flow-second{
+  color:gray;
+}
+.flow-processing{
+  color:rgba(52, 163, 52, 0.6);
 }
