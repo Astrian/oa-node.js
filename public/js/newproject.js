@@ -17,14 +17,14 @@ var newproject = new Vue({
         "Content-Type": "application/json"
       }
       var data = {
-        数据: newproject.$data.project_fill,
-        模板ID: newproject.$data.template.id
+        data: newproject.$data.project_fill,
+        template: newproject.$data.template.id
       }
       console.log(data)
       newproject.$http.post('/api/project/newproject', data, options).then(res => {
-        window.location = '/project/detail?id='+res.body.数据.专案ID+'&tip=project-new-1'
+        window.location = '/project/detail?id='+res.body.data.template+'&tip=project-new-1'
       },res=>{
-        modal.$data.showModal('无法新建专案', '错误是 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+        modal.$data.showModal('无法新建专案', '错误是 ' + res.body.description + '（代码：' + res.body.code + '）')
       })
     },
     back: function(){
@@ -38,9 +38,9 @@ var appData = newproject.$data
 
 function showtemplate(){
   newproject.$http.get('/api/project/gettemplatelist?type=1').then(res => {
-    appData.templates = res.body.数据
+    appData.templates = res.body.data
   },res=>{
-    modal.$data.showModal('无法获取模板列表', '错误是 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+    modal.$data.showModal('无法获取模板列表', '错误是 ' + res.body.description + '（代码：' + res.body.code + '）')
   })
 }
 showtemplate()
@@ -55,9 +55,9 @@ function whichtemplate(){
   newproject.$http.get('/api/project/gettemplatedetail?id='+appData.choosedtemplate).then(res=>{
     appData.choose_disable = false
     appData.choosetemplate = false
-    appData.template = res.body.数据
+    appData.template = res.body.data
     appData.fillproject = true
   },res=>{
-    modal.$data.showModal('无法获取模板详情', '错误是 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+    modal.$data.showModal('无法获取模板详情', '错误是 ' + res.body.description + '（代码：' + res.body.code + '）')
   })
 }

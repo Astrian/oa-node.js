@@ -46,6 +46,10 @@ router.get('/project/template/new', function(req, res, next) {
   if (req.session.user != null) res.render('template-new');
   else res.redirect('/')
 });
+router.get('/project/flow', function(req, res, next) {
+  if (req.session.user != null) res.render('flow');
+  else res.redirect('/')
+});
 router.get('/announcement', function(req, res, next) {
   if (req.session.user != null) res.render('announcement-index');
   else res.redirect('/')

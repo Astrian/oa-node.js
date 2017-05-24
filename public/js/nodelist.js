@@ -6,10 +6,10 @@ var nodelist = new Vue({
 })
 
 function getlist() {
-  nodelist.$http.get('/api/node/getnodesheet').then(res => {
-    nodelist.$data.list = res.body.数据
+  nodelist.$http.get('/api/node/getnodelist').then(res => {
+    nodelist.$data.list = res.body.data
   }, res => {
-    modal.$data.showModal('无法获取专案详情', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+    modal.$data.showModal('无法获取专案详情', '因为 ' + res.body.description + '（代码：' + res.body.code + '）')
   })
 }
 getlist()

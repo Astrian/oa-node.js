@@ -16,7 +16,7 @@
     <div class='webhead' id='user'>
       <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
       <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
+        <image class='avatar img-circle' v-bind:src='user.avatar'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
           <ul class="dropdown-menu" aria-labelledby="usermenu">
             <li><a href="/signout">退出登录</a></li>
           </ul>
@@ -32,19 +32,19 @@
           <div class='columnview'>
             <div class="form-group columnview">
               <label for="form-nodename">部门名称</label>
-              <input class="form-control" id="form-nodename" v-model='node.部门名称'> </div>
+              <input class="form-control" id="form-nodename" v-model='node.name'> </div>
             <div class="form-group columnview">
               <label for="form-managerusername">部门经理的用户名</label>
-              <input class="form-control" id="form-managerusername" v-model='node.部门经理'> </div>
+              <input class="form-control" id="form-managerusername" v-model='node.manager'> </div>
             <div class="form-group columnview">
               <label>这是人事部吗？</label>
             <div class="radio columnview">
               <label>
-                <input type="radio" value=true v-model='node.是人事部'> 是的，这个部门是一个人事部门 </label>
+                <input type="radio" value=true v-model='node.ispersonnel'> 是的，这个部门是一个人事部门 </label>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" value=false v-model='node.是人事部'> 不是，这只是一个普通部门 </label>
+                <input type="radio" value=false v-model='node.ispersonnel'> 不是，这只是一个普通部门 </label>
             </div>
               <p class="help-block">人事部门拥有部分系统高级权限，包括帐户恢复、新建帐户、新建专案模板等。</p>
             </div>

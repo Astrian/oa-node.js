@@ -13,20 +13,13 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+    <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
       <div class='col-md-3'>
         <div class="list-group" id='menu'>
           <a href="/announcement" class="list-group-item active">公告列表</a> 
-          <a href="/announcement/new" class="list-group-item" v-if='(user.所属部门.是人事部) || (user.所属部门.部门经理ID == user.id)'>发布公告</a>
+          <a href="/announcement/new" class="list-group-item" v-if='(user.node.ispersonnel) || (user.node.manager == user.id)'>发布公告</a>
         </div>
       </div>
       <div class='col-md-9 columnview'>
@@ -37,10 +30,10 @@
           <a  v-for='singal in announcementlist' v-bind:href='"/announcement/detail?id="+singal.id'>
             <div class="panel panel-default">
               <div class="panel-body columnview"> 
-                <h3>{{singal.标题}}</h3>
+                <h3>{{singal.title}}</h3>
                 <p>
-                <image class='avatar img-circle' v-bind:src='singal.发布者.头像'></image>
-                  {{singal.发布者.姓}}{{singal.发布者.名}} 发布于 {{singal.发布时间}}
+                <image class='avatar img-circle' v-bind:src='singal.publisher.avatar'></image>
+                  {{singal.publisher.firstname}}{{singal.publisher.lastname}} 发布于 {{singal.time}}
                 </p>
               </div>
             </div>

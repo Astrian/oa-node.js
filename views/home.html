@@ -13,14 +13,7 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+    <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
       <div class='manupanel col-md-8' id='menu'>
@@ -49,7 +42,7 @@
           <div class='menu-cell-text'> <span class='menu-cell-title'>人事</span> <span class='menu-cell-description'>管理企业员工，及其系统帐户。</span> </div>
         </div>
         </a>
-        <a v-if='user.帐户状态 == 2' href='/node'>
+        <a v-if='user.status == 2' href='/node'>
           <div class='menu-cell'>
             <div>
               <image src='/public/images/people.svg' class='home-icon'></image>
@@ -64,15 +57,15 @@
             <h3 class="panel-title">通知</h3> </div>
           <ul v-if='notification' class="list-group">
             <div v-for="item in notification">
-            <a v-bind:href='"/"+item.类型+"/detail?id="+item.连接至' class="list-group-item">
+            <a v-bind:href='"/"+item.type+"/detail?id="+item.linkto' class="list-group-item">
               <div class='noti-cell noti-cell-read'>
                 <div class="noti-cell-content">
-                  <div><span><span class="label label-info" v-if='item.已读 == 0'>新通知</span>{{item.内容}}</span></div>
-                  <div class="small time">{{item.发送时间}}</div>
+                  <div><span><span class="label label-info" v-if='item.read == 0'>新通知</span>{{item.content}}</span></div>
+                  <div class="small time">{{item.time}}</div>
                 </div>
                 <div class='noti-cell-icon'>
-                  <image src='/public/images/project.svg' v-if='item.类型 == "project"'></image>
-                  <image src='/public/images/notification.svg' v-else-if='item.类型 == "announcement"'></image>
+                  <image src='/public/images/project.svg' v-if='item.type == "project"'></image>
+                  <image src='/public/images/notification.svg' v-else-if='item.type == "announcement"'></image>
                 </div>
               </div>
               </a>

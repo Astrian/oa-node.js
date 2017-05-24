@@ -13,20 +13,13 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+     <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
       <div class='col-md-3'>
         <div class="list-group" id='menu'>
           <a href="/announcement" class="list-group-item">公告列表</a> 
-          <a href="/announcement/new" class="list-group-item" v-if='(user.所属部门.是人事部) || (user.所属部门.部门经理ID == user.id)'>发布公告</a>
+          <a href="/announcement/new" class="list-group-item" v-if='(user.node.ispersonnel) || (user.node.manager == user.id)'>发布公告</a>
         </div>
       </div>
       <div class='col-md-9 columnview'>
@@ -34,14 +27,14 @@
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
         <div id='announcementdetail' class="columnview">
-          <h1>{{detail.标题}}</h1>
-          <div class='announcement-metainfo'><image v-bind:src='detail.发布者.头像' class='avatar img-circle'></image> {{detail.发布者.姓}}{{detail.发布者.名}} 发布于 {{detail.发布时间}}</div>
-          <div v-html="detail.正文" class='columnview announcementbody'></div>
+          <h1>{{detail.title}}</h1>
+          <div class='announcement-metainfo'><image v-bind:src='detail.publisher.avatar' class='avatar img-circle'></image> {{detail.publisher.firstname}}{{detail.publisher.lastname}} 发布于 {{detail.time}}</div>
+          <div v-html="detail.body" class='columnview announcementbody'></div>
           <hr>
           <div class='columnview'>
             <b>阅读过该公告的同事</b>
-            <div v-for='user in detail.已读清单' class='readlist-cell'>
-              <image v-bind:src='user.头像' class='avatar img-circle'> {{user.姓}}{{user.名}} 在 {{user.时间}} 阅读了这个公告。
+            <div v-for='user in detail.readlist' class='readlist-cell'>
+              <image v-bind:src='user.user.avatar' class='avatar img-circle'> {{user.user.firstname}}{{user.user.lastname}} 在 {{user.time}} 阅读了这个公告。
             </div>
           </div>
         </div>

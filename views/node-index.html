@@ -13,19 +13,12 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+    <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
       <div class='col-md-3' id='menu'>
-        <div class="list-group"> 
-          <a href="/node" class="list-group-item active">所有部门</a> 
+        <div class="list-group">
+          <a href="/node" class="list-group-item active">所有部门</a>
           <a href="/node/new" class="list-group-item">新建部门</a></div>
       </div>
       <div class='col-md-9 columnview'>
@@ -40,9 +33,9 @@
             </thead>
             <tbody>
               <tr v-for='item in list'>
-                <td>{{item.名称}}</td>
-                <td><span v-if='item.父级部门'>{{item.父级部门}}</span><span v-else><i>此部门为根级部门。</i></span></td>
-                <td><span v-if='item.部门经理'><image v-bind:src='item.部门经理.头像' class='avatar img-circle'>&nbsp;{{item.部门经理.姓}}{{item.部门经理.名}}</span><span v-else><i>暂缺。</i></span></td>
+                <td>{{item.name}}</td>
+                <td><span v-if='item.parentnode'>{{item.parentnode}}</span><span v-else><i>此部门为根级部门。</i></span></td>
+                <td><span v-if='item.manager'><image v-bind:src='item.manager.avatar' class='avatar img-circle'>&nbsp;{{item.manager.firstname}}{{item.manager.lastname}}</span><span v-else><i>暂缺。</i></span></td>
               </tr>
             </tbody>
           </table>

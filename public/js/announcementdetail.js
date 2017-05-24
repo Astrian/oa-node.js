@@ -16,15 +16,14 @@ function getUrlParam(name) {
 function getannouncement(){
   var id = getUrlParam('id')
   announcementdetail.$http.get('/api/announcement/getdetail?id='+id).then(res => {
-    res = (JSON.parse(res.bodyText)).数据
-    res.发布时间 = moment(res.发布时间).fromNow()
-    for (var i in res.已读清单){
-      console.log(res.已读清单[i].时间)
-      res.已读清单[i].时间 = moment(res.已读清单[i].时间).fromNow()
+    res = (JSON.parse(res.bodyText)).data
+    res.time = moment(res.time).fromNow()
+    for (var i in res.readlist){
+      res.readlist[i].time = moment(res.readlist[i].time).fromNow()
     }
     announcementdetail.$data.detail = res
   }, res => {
-    modal.$data.showModal('无法获取公告详情', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+    modal.$data.showModal('无法获取公告详情', '因为 ' + res.body.description + '（代码：' + res.body.code + '）')
   })
 }
 getannouncement()

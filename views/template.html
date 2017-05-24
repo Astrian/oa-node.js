@@ -13,34 +13,27 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+    <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
-      <div class='col-md-3'>
-        <div class="list-group" id='menu'>
+      <div class="col-md-3 list-group" id='menu'>
           <a href="/project" class="list-group-item">专案列表</a>
           <a href="/project/new" class="list-group-item">新建专案</a>
-          <a href="/project/template" class="list-group-item active" v-if='(user.所属部门.是人事部) || (user.帐户状态 == 2)'>模板</a></div>
-      </div>
+          <a href="/project/template" class="list-group-item active" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a>
+          <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a>
+        </div>
       <div class='col-md-9 columnview'>
         <div id='tip'>
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
         <div id='projectlist' class="columnview">
           <div id='template' class='columnview'>
-            <h3>我创建的模板 <a href='/project/template/new'><button class='btn btn-default'>创建新的专案模板</button></a></h3>
+            <h3>模板列表 <a href='/project/template/new'><button class='btn btn-default'>创建新的专案模板</button></a></h3>
             <a v-bind:href='"/project/template/detail?id="+template.id' v-for='template in templates'>
               <div class="panel panel-default">
                 <div class="panel-body columnview">
-                  <p class='projecttitle'>{{template.标题}}</p>
-                  <p class='projectdes'>{{template.描述}}</p>
+                  <p class='projecttitle'>{{template.title}}</p>
+                  <p class='projectdes'>{{template.description}}</p>
                 </div>
               </div>
             </a>

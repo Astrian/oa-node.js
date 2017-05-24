@@ -13,20 +13,13 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+     <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
       <div class='col-md-3'>
         <div class="list-group" id='menu'>
           <a href="/announcement" class="list-group-item">公告列表</a> 
-          <a href="/announcement/new" class="list-group-item active" v-if='(user.所属部门.是人事部) || (user.所属部门.部门经理ID == user.id)'>发布公告</a>
+          <a href="/announcement/new" class="list-group-item active" v-if='(user.node.ispersonnel) || (user.node.manager == user.id)'>发布公告</a>
         </div>
       </div>
       <div class='col-md-9 columnview'>
@@ -37,11 +30,11 @@
           <h3>发布公告</h3>
           <div class="form-group columnview">
             <label for="ann-title">公告标题</label>
-            <input class="form-control" id="ann-title" v-model='announcement.标题'> </div>
+            <input class="form-control" id="ann-title" v-model='announcement.title'> </div>
           <div class="form-group columnview">
             <label for="ann-body">公告正文</label>
             <div v-if='!preview' class='columnview'>
-              <textarea class="form-control" id='ann-body' rows="10" v-model='announcement.正文'></textarea>
+              <textarea class="form-control" id='ann-body' rows="10" v-model='announcement.body'></textarea>
               <p class="help-block">支持使用 Markdown，不能使用 HTML 代码。<a href='#' v-on:click='triggerpreview(true)'>预览</a></p>
             </div>
             <div v-else class='columnview'>
@@ -51,7 +44,7 @@
           </div>
           <div class="form-group columnview">
             <label for="ann-body">范围</label>
-            <select class="form-control" v-model='announcement.范围'>
+            <select class="form-control" v-model='announcement.visible'>
               <option value='1'>部门内可见</option>
               <option value='2'>全公司可见</option>
             </select>

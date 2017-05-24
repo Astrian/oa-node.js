@@ -13,22 +13,15 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
-    </div>
+    <div class='webhead' id='user' v-html='userinfo'>
+   </div>
     <div class='main row'>
-      <div class='col-md-3'>
-        <div class="list-group" id='menu'>
+      <div class="col-md-3 list-group" id='menu'>
           <a href="/project" class="list-group-item">专案列表</a>
           <a href="/project/new" class="list-group-item">新建专案</a>
-          <a href="/project/template" class="list-group-item active" v-if='(user.所属部门.是人事部) || (user.帐户状态 == 2)'>模板</a></div>
-      </div>
+          <a href="/project/template" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a>
+          <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a>
+        </div>
       <div class='col-md-9 columnview'>
         <div id='newtemplate' class='columnview'>
           <h3>新建专案模板</h3>
@@ -46,83 +39,40 @@
             <label for="field-des">模板表单字段</label>
             <div class='columnview'>
               <div v-for='(field, index) in fields'>
-                <div class="form-inline">
-                  <div class="form-group">
-                    <input class="form-control" placeholder="字段名称" v-model="fields[index].名称"> </div>
-                  <div class="form-group">
-                    <input class="form-control" placeholder="字段说明" v-model="fields[index].描述"> </div>
-                  <div class="form-group">
-                    <select class="form-control" v-model="fields[index].类型">
-                      <option value='字段'>单行字段</option>
-                      <option value='文本'>多行文本</option>
-                      <option value='数字'>数字</option>
-                    </select>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <strong>第 {{index+1}} 个字段<span v-if='fields[index].title'>：{{fields[index].title}}</span></strong>
                   </div>
-                  <button class="btn btn-default" v-on:click='delfield(index)'>删</button>
+                  <div class="panel-body columnview">
+                      <div class="form-group columnview">
+                        <label v-bind:for='"fieldname-"+index'>名称</label>
+                        <input v-bind:id='"fieldname-"+index' class="form-control" v-model="fields[index].title">
+                        <p class="help-block">对方需要填写的信息是什么？</p>
+                      </div>
+                      <div class="form-group columnview">
+                        <label v-bind:for='"fielddescription-"+index'>说明</label>
+                        <input v-bind:id='"fielddescription-"+index' class="form-control" v-model="fields[index].description">
+                        <p class="help-block">简单描述这个字段的填写格式、要求等。</p>
+                      </div>
+                      <div class="form-group columnview">
+                        <label v-bind:for='"fieldtype-"+index'>类型</label>
+                          <select v-bind:id='"fieldtype-"+index' class="form-control" v-model="fields[index].type">
+                            <option value='string'>单行字段</option>
+                            <option value='text'>多行文本</option>
+                            <option value='number'>数字</option>
+                          </select>
+                          <p class="help-block">这个字段应该要求对方填写什么类型的数据？</p>
+                      </div>
+                  </div>
+                  <div class="panel-footer"><button class="btn btn-default" v-on:click='delfield(index)'>删除这个字段</button></div>
                 </div>
               </div>
-              <div>
-                <button class='btn btn-default' v-on:click='addfield()'>新建一个字段</button>
-              </div>
-            </div>
-            <label for="field-des">专案路由</label>
-            <div class='columnview'>
-              <div v-for='(route, index) in routes' class='columnview'>
-                <p>第 {{index+1}} 顺位：</p>
-                <div> 当
-                  <div class="form-group">
-                    <select class="form-control" v-model="routes[index].判断.字段">
-                      <option v-for='(field, i) in fields' v-bind:value='i'>{{field.名称}}</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <select class="form-control" v-model="routes[index].判断.条件">
-                      <option value='='>等于</option>
-                      <option value='>'>大于</option>
-                      <option value='>='>大于或等于</option>
-                      <option value='<'>小于</option>
-                      <option value='<='>小于或等于</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <input class='form-control' v-model="routes[index].判断.基准值"> </div> 时， </div>
-                <p> 按此顺序步骤审核此专案： </p>
-                <div v-for='(step, j) in routes[index].流程'>
-                  <select class="form-control" v-model="routes[index].流程[j]">
-                    <option v-if='j != 0' value=-1>当上一步骤处理的部门选择通过专案时，由其决定此步骤</option>
-                    <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
-                  </select>
-                  <button class='btn btn-default' v-on:click='delstep(index,j)'>删</button>
-                </div>
-                <div> <a v-on:click='addstep(index)'>新增一个顺序步骤</a> </div>
-                <div>
-                  <button class="btn btn-default" v-on:click='delroute(index)'>删除第 {{index+1}} 顺位</button>
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <button class='btn btn-default' v-on:click='addfield()'>新建一个字段</button>
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button class='btn btn-default' v-on:click='addroute()'>新建一个路由顺位</button>
-          </div>
-          <label for="field-title">默认路由</label>
-          <p>提交专案时，系统会按照模板规定的顺位顺序依次判断，决定相应专案以何种路由进行提交。如果所有顺位条件都不符合，且开启了默认路由，则该专案将以默认路由的流程进行提交。</p>
-          <p>如果专案只有一个流程，那么建议<b>不设置顺位路由</b>，仅开启并设置默认路由。</p>
-          <p>如果不开启默认路由，请<b>确保所有顺位条件能够分流所有的专案</b>。</p>
-          <div class='columnview'>
-          <div class="checkbox">
-            <label><input type="checkbox" v-model='enabledefaultroute' v-on:click='defaultroutetrigger()'> 开启默认路由</label>
-            </div>
-            <div v-if='enabledefaultroute' class='columnview'>
-              <div v-for='(route, j) in defaultroute.流程'>
-                <select class="form-control" v-model="defaultroute.流程[j]">
-                  <option v-if='j != 0' value=-1>当上一步骤处理的部门选择通过专案时，由其决定此步骤</option>
-                    <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
-                  </select>
-                <button class='btn btn-default' v-on:click='delstep(index,j)'>删</button>
-              </div>
-              <div> <a v-on:click='addstepindefault()'>新增一个顺序步骤</a> </div>
-            </div>
-            
           </div>
           <button class='btn btn-primary' v-on:click='submit()'>填写完毕，提交模板</button>
         </div>

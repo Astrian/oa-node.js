@@ -13,21 +13,14 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
+    <div class='webhead' id='user' v-html='userinfo'>
     </div>
     <div class='main row'>
-      <div class='col-md-3'>
-        <div class="list-group" id='menu'>
-          <a href="/project" class="list-group-item">专案列表</a>
-          <a href="/project/new" class="list-group-item active">新建专案</a>
-          <a href="/project/template" class="list-group-item" v-if='(user.所属部门.是人事部) || (user.帐户状态 == 2)'>模板</a></div>
+      <div class="col-md-3 list-group" id='menu'>
+        <a href="/project" class="list-group-item">专案列表</a>
+        <a href="/project/new" class="list-group-item active">新建专案</a>
+        <a href="/project/template" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a>
+        <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a>
       </div>
       <div class='col-md-9 columnview'>
         <div id='newproject' class="columnview">
@@ -35,7 +28,7 @@
             <h3>选择一个专案模板</h3>
             <div v-if='templates[0]' class='columnview'>
               <select multiple class="form-control" v-model="choosedtemplate" v-bind:disabled='choose_disable'>
-                <option v-for='template in templates' v-bind:value='template.id'>{{template.标题}}</option>
+                <option v-for='template in templates' v-bind:value='template.id'>{{template.title}}</option>
               </select>
               <div>
                 <button class="btn btn-default" v-on:click='whichtemplate()' v-bind:disabled='choose_disable'>继续</button>
@@ -46,23 +39,23 @@
             </div>
           </div>
           <div v-if='fillproject' class='columnview'>
-            <h3>{{template.标题}}<span class='small'><br><br>{{template.描述}}</span></h3>
+            <h3>{{template.title}}<span class='small'><br><br>{{template.description}}</span></h3>
             <div class='columnview'>
-              <div v-for='(field, index) in template.表字段'>
-                <div class="form-group columnview" v-if='field.类型 == "数字"'>
-                  <label v-bind:for='"field-"+index'>{{field.名称}}</label>
+              <div v-for='(field, index) in template.sheets'>
+                <div class="form-group columnview" v-if='field.type == "number"'>
+                  <label v-bind:for='"field-"+index'>{{field.title}}</label>
                   <input type="number" class="form-control" v-bind:id='"field-"+index' v-model="project_fill[index]">
-                  <p class="help-block">{{field.描述}}</p>
+                  <p class="help-block">{{field.description}}</p>
                 </div>
-                <div class="form-group columnview" v-else-if='field.类型 == "字段"'>
-                  <label v-bind:for='"field-"+index'>{{field.名称}}</label>
+                <div class="form-group columnview" v-else-if='field.type == "string"'>
+                  <label v-bind:for='"field-"+index'>{{field.title}}</label>
                   <input type="text" class="form-control" v-bind:id='"field-"+index' v-model="project_fill[index]">
-                  <p class="help-block">{{field.描述}}</p>
+                  <p class="help-block">{{field.description}}</p>
                 </div>
-                <div class="form-group columnview" v-else-if='field.类型 == "文本"'>
-                  <label v-bind:for='"field-"+index'>{{field.名称}}</label>
+                <div class="form-group columnview" v-else-if='field.type == "text"'>
+                  <label v-bind:for='"field-"+index'>{{field.title}}</label>
                   <textarea class="form-control" rows="3" v-bind:id='"field-"+index' v-model="project_fill[index]"></textarea>
-                  <p class="help-block">{{field.描述}}</p>
+                  <p class="help-block">{{field.description}}</p>
                 </div>
               </div>
               <div>

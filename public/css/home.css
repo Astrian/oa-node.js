@@ -4,6 +4,9 @@
 .webhead{
   margin-top: 40px;
 }
+.form-control{
+  display: block;
+}
 .website-name{
   font-size: 25px;
   color: black;
@@ -132,9 +135,6 @@ a:hover{
 .progress{
   flex-grow: 1;
   margin-left: 20px;
-}
-.form-group{
-  width: 100%;
 }
 body{
   padding-bottom: 30px;

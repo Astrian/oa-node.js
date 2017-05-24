@@ -7,7 +7,7 @@ var userlist = new Vue({
 })
 function getuserlist(){
   user.$http.get('/api/user/getlist').then(res => {
-    userlist.$data.list = res.body.数据
+    userlist.$data.list = res.body.data
   }, res=>{})
 }
 getuserlist()

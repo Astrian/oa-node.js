@@ -3,9 +3,9 @@ var newannouncement = new Vue({
   data: {
     preview: false,
     announcement: {
-      标题: null,
-      正文: "",
-      范围: null,
+      title: null,
+      body: "",
+      visible: null
     },
     bodypreview: null,
     triggerpreview(control) {
@@ -18,9 +18,9 @@ var newannouncement = new Vue({
       }
       var data = newannouncement.$data.announcement
       newannouncement.$http.post('/api/announcement/send', data, options).then(res => {
-        window.location = '/announcement/detail?tips=announcement-post-1&id='+res.body.数据.公告ID
+        window.location = '/announcement/detail?tips=announcement-post-1&id='+res.body.data.id
       }, res => {
-        modal.$data.showModal('无法获取公告详情', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+        modal.$data.showModal('无法发布公告', '因为 ' + res.body.description + '（代码：' + res.body.code + '）')
       })
     }
   }
