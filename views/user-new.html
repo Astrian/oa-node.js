@@ -17,7 +17,7 @@
     </div>
     <div class='main row'>
       <div class='col-md-3' id='menu'>
-        <div class="list-group"> 
+        <div class="list-group">
           <a href="/user" class="list-group-item">所有同事</a>
           <a href="/user/new" class="list-group-item active" v-if='user.node.ispersonnel'>创建新帐户</a></div>
       </div>
@@ -26,28 +26,28 @@
           <h3>创建新帐户</h3>
           <div class="form-group columnview">
             <label for="form-username">用户名</label>
-            <input class="form-control" id="form-username" v-model='user.用户名'>
+            <input class="form-control" id="form-username" v-model='user.username'>
           </div>
           <div class="form-group columnview">
             <label for="form-firstname">姓 / First Name</label>
-            <input class="form-control" id="form-firstname" v-model='user.姓'>
+            <input class="form-control" id="form-firstname" v-model='user.firstname'>
           </div>
           <div class="form-group columnview">
             <label for="form-lastname">名 / Last Name</label>
-            <input class="form-control" id="form-lastname" v-model='user.名'>
+            <input class="form-control" id="form-lastname" v-model='user.lastname'>
           </div>
           <div class="form-group columnview">
             <label for="form-email">电邮地址</label>
-            <input type="email" class="form-control" id="form-email" v-model='user.邮箱'>
+            <input type="email" class="form-control" id="form-email" v-model='user.mail'>
           </div>
           <div class="form-group columnview">
             <label for="form-email">头像</label>
-            <input type="email" class="form-control" id="form-email" v-model='user.头像'>
+            <input type="email" class="form-control" id="form-email" v-model='user.avatar'>
           </div>
           <div class="form-group columnview">
             <label for="form-node">所属部门</label>
-            <select class="form-control" id='form-node' v-model='user.所属部门'>
-              <option v-for='node in nodes' v-bind:value='node'>{{node}}</option>
+            <select class="form-control" id='form-node' v-model='user.node'>
+              <option v-for='node in nodes' v-bind:value='node.id'>{{node.name}}</option>
             </select>
           </div>
           <div>

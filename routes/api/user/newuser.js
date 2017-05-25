@@ -28,7 +28,7 @@ module.exports = function (req, res, api, post) {
     SQLStatement = 'INSERT INTO user (username, mail, firstname, lastname, avatar, node, status) VALUES ("'+reqBody.username+'", "'+reqBody.mail+'","'+reqBody.firstname+'","'+reqBody.lastname+'","'+reqBody.avatar+'","'+node.id+'", 0)'
     result = yield dbOps(SQLStatement, callback.next)
     var recovery = randomDigitGen(16)
-    SQLStatement = 'INSERT INTO user_recovery (id, 密钥) VALUES ("'+result.insertId+'", "'+recovery+'")'
+    SQLStatement = 'INSERT INTO user_recovery (id, recovery) VALUES ("'+result.insertId+'", "'+recovery+'")'
     yield dbOps(SQLStatement, callback.next)
     return return4Success({
       recovery: recovery

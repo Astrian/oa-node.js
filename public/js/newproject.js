@@ -12,13 +12,15 @@ var newproject = new Vue({
     fillproject: false,
     template:{},
     project_fill:[],
+    project_priority:2,
     submit:function(){
       var options = {
         "Content-Type": "application/json"
       }
       var data = {
         data: newproject.$data.project_fill,
-        template: newproject.$data.template.id
+        template: newproject.$data.template.id,
+        priority: newproject.$data.project_priority
       }
       console.log(data)
       newproject.$http.post('/api/project/newproject', data, options).then(res => {

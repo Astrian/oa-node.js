@@ -34,7 +34,7 @@ module.exports = function (req, res, api, reqBody) {
       }].concat(JSON.parse(result.readlist))) + "' WHERE id = " + result.id
       yield dbOps(SQLStatement, callback.next)
       SQLStatement = 'SELECT firstname, lastname, avatar FROM user WHERE id = ' + loginUID
-      readlist = [(yield dbOps(SQLStatement, callback.next))[0]].concat(readlist)
+      readlist = [{user:(yield dbOps(SQLStatement, callback.next))[0],time:null}].concat(readlist)
       readlist[0].time = new Date().getTime()
     }
     SQLStatement = 'SELECT firstname, lastname, avatar FROM user WHERE id = ' + result.publisher

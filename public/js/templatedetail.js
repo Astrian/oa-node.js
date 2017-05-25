@@ -9,7 +9,7 @@ var templatedetail = new Vue({
     },
     submit: function(){
       var data = {
-        模板ID: getUrlParam('id')
+        template: getUrlParam('id')
       }
       var options = {
         "Content-Type": "application/json"
@@ -17,7 +17,7 @@ var templatedetail = new Vue({
       templatedetail.$http.post('/api/project/publishtemplate', data, options).then(res => {
         window.location = '/project/template/detail?id='+getUrlParam('id')+'&tip=template-submit-1'
       },res=>{
-        modal.$data.showModal('无法提交专案', '错误是' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+        modal.$data.showModal('无法提交专案', '错误是' + res.body.description + '（代码：' + res.body.code + '）')
       })
     }
   }
@@ -32,16 +32,10 @@ function getUrlParam(name) {
 
 function getDetail() {
   templatedetail.$http.get('/api/project/gettemplatedetail?id=' + getUrlParam('id')).then(res => {
-    res.body.数据.创建时间 = moment(res.body.数据.创建时间).fromNow()
-    var 流程 = res.body.数据.流程
-    for (var i in 流程) {
-      if(流程[i].判断 != '其他'){
-        流程[i].判断.字段 = res.body.数据.表字段[流程[i].判断.字段].名称
-      }
-    }
-    templatedetail.$data.template = res.body.数据
+    res.body.data.createat = moment(res.body.data.createat).fromNow()
+    templatedetail.$data.template = res.body.data
   }, res => {
-    modal.$data.showModal('无法获取模板详情', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+    modal.$data.showModal('无法获取模板详情', '因为 ' + res.body.description + '（代码：' + res.body.code + '）')
   })
 }
 getDetail()

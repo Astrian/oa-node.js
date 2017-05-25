@@ -13,34 +13,26 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user'>
-      <div class='website-title'><a href='/'><span class='website-name'>企业自动化办公系统</span></a></div>
-      <div class="dropdown userinfo">
-        <image class='avatar img-circle' v-bind:src='user.头像'>&nbsp; <a id="usermenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href>{{user.姓}}{{user.名}}&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu" aria-labelledby="usermenu">
-            <li><a href="/signout">退出登录</a></li>
-          </ul>
-      </div>
-    </div>
+    <div class='webhead' id='user' v-html='userinfo'></div>
     <div class='main row'>
-      <div class='col-md-3'>
-        <div class="list-group" id='menu'>
-          <a href="/project" class="list-group-item">专案列表</a>
-          <a href="/project/new" class="list-group-item">新建专案</a>
-          <a href="/project/template" class="list-group-item active" v-if='(user.所属部门.是人事部) || (user.帐户状态 == 2)'>模板</a></div>
+      <div class="col-md-3 list-group" id='menu'>
+        <a href="/project" class="list-group-item">专案列表</a>
+        <a href="/project/new" class="list-group-item">新建专案</a>
+        <a href="/project/template" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a>
+        <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a>
       </div>
       <div class='col-md-9 columnview'>
         <div id='tip'>
           <div class="alert alert-success" role="alert" v-if='show'><b>{{title}}</b>&nbsp;{{content}}</div>
         </div>
         <div id='templatedetail' class='columnview'>
-          <h3>{{template.标题}}
-            <span v-if='template.状态 == 0' class="label label-warning">草稿</span> 
-            <span v-if='template.状态 == 1' class="label label-success">上线</span> 
-            <span v-if='template.状态 == -1' class="label label-default">已归档</span> 
-            <span class='small'>创建于 {{template.创建时间}}</span></h3>
+          <h3>{{template.title}}
+            <span v-if='template.status == 0' class="label label-warning">草稿</span>
+            <span v-if='template.status == 1' class="label label-success">上线</span>
+            <span v-if='template.status == -1' class="label label-default">已归档</span>
+            <span class='small'>创建于 {{template.createat}}</span></h3>
           <p>{{template.描述}}</p>
-          <h4>模板字段</h4>
+          <h3>模板字段</h3>
           <table class="table">
           <thead>
             <tr>
@@ -50,44 +42,97 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for='item in template.表字段'>
-              <td>{{item.名称}}</td>
-              <td>{{item.描述}}</td>
-              <td>{{item.类型}}</td>
-            </tr>
-          </tbody>
-        </table>
-          <h4>专案流程路由</h4>
-          <table class="table">
-          <thead>
-            <tr>
-              <th>条件</th>
-              <th>流程路由</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for='item in template.流程'>
-              <td v-if='item.判断 == "其他"'>不符合上述情况时</td>
-              <td v-else>当&nbsp;{{item.判断.字段}}&nbsp;
-                <span v-if='item.判断.条件 == ">"'>大于</span>
-                <span v-if='item.判断.条件 == ">="'>大于或等于</span>
-                <span v-if='item.判断.条件 == "<"'>小于</span>
-                <span v-if='item.判断.条件 == "<="'>小于或等于</span>
-                <span v-if='item.判断.条件 == "="'>等于</span>
-                &nbsp;{{item.判断.基准值}} 时
+            <tr v-for='item in template.sheets'>
+              <td>{{item.title}}</td>
+              <td>{{item.description}}</td>
+              <td>
+                <span v-if='item.type=="string"'>单行字段</span>
+                <span v-if='item.type=="text"'>多行文本</span>
+                <span v-if='item.type=="number"'>数字</span>
               </td>
-              <td>{{item.流程}}</td>
             </tr>
           </tbody>
         </table>
-          <div v-if='template.状态 == 0'>
-            <button class="btn btn-primary" v-on:click='submit()'>发布</button>
-            <button class="btn btn-default">归档</button>
+        <h3>绑定的流程</h3>
+        <div v-if='template.flow' class='columnview'>
+          <div class="panel panel-default" v-for='(item, index) in template.flow'>
+            <div class="panel-heading">
+              <strong>
+                <span v-if='item.judge != "other"'>
+                  <span v-if='item.judge.field != "priority"'>
+                    当 {{template.sheets[item.judge.field].title}}
+                    <span v-if='item.judge.condition == ">"'>大于</span>
+                    <span v-else-if='item.judge.condition == "<"'>小于</span>
+                    <span v-else-if='item.judge.condition == ">="'>不小于</span>
+                    <span v-else-if='item.judge.condition == "<="'>不大于</span>
+                    <span v-else-if='item.judge.condition == "="'>是</span>
+                    {{item.judge.value}} 时
+                  </span>
+                  <span v-else>
+                    当优先级为
+                    <span v-if='item.judge.value == 1'>紧急</span>
+                    <span v-if='item.judge.value == 2'>普通</span>
+                    <span v-if='item.judge.value == 3'>低优先级</span>
+                    时
+                  </span>
+                </span>
+                <span v-else>
+                  <span v-if='index != 0'>不符合上述情况时</span>
+                  <span v-else>所有专案都将使用该流程</span>
+                </span>
+              </strong>
+            </div>
+            <div class="panel-body">
+              <div class='columnview'>
+              <strong>使用「{{item.flow.title}}」流程</strong>
+              <div class='columnview'>
+                <div v-for='(people, j) in item.flow.flow' class='flowstep'>
+                  <div v-if='people == -1'>
+                    <div>
+                      <image src='/public/images/default-avatar.jpg' class='avatar-medium img-circle'></image>
+                    </div>
+                    <div class='columnview'>
+                      <div class='flow-username'>申请人的部门经理</div>
+                      <div class='flow-second'>第 {{index+1}} 步</div>
+                    </div>
+                  </div>
+                  <div v-else-if='people == -2'>
+                    <div>
+                      <image src='/public/images/default-avatar.jpg' class='avatar-medium img-circle'></image>
+                    </div>
+                    <div class='columnview'>
+                      <div class='flow-username'>由上一步决定此步骤负责人</div>
+                      <div class='flow-second'>第 {{index+1}} 步</div>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <div>
+                      <image v-bind:src='people.avatar' class='avatar-medium img-circle'></image>
+                    </div>
+                    <div class='columnview'>
+                      <div class='flow-username'>{{people.firstname}}{{people.lastname}}</div>
+                      <div class='flow-second'>第 {{j+1}} 步</div>
+                    </div>
+                  </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+        <div v-else>该模板暂未绑定任何流程。</div>
+          <div v-if='template.status == 0  && (user.node.ispersonnel == 1 || user.status == 2)' class='columnview'>
+            <h3>操作该模板</h3>
+            <div><button class="btn btn-primary" v-on:click='submit()'>发布</button>
+            <button class="btn btn-default">归档</button></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+          </div>
   <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
     <div class="modal-dialog" role="document">
       <div class="modal-content">

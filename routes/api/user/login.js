@@ -15,9 +15,9 @@ module.exports = function (req, res, api, post) {
     if (dbResult[0].status != 1 && dbResult[0].status != 2) return callback4Fail(400, 2, '帐户状态不正常')
     var token = dbResult[0].token
     var authResult = authenticator.verifyToken(token, reqBody.code)
-    authResult = {
+    /*authResult = {
         delta: 0
-      } // 调试用
+      } // 调试用*/
     if (authResult) {
       if (authResult.delta == 0) {
         req.session.user = dbResult[0].id

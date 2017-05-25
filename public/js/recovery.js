@@ -11,15 +11,15 @@ var recovery = new Vue({
         "Content-Type": "application/json"
       }
       var data = {
-        用户名: recovery.$data.username,
-        恢复密钥: recovery.$data.code
+        username: recovery.$data.username,
+        recovery: recovery.$data.code
       }
       recovery.$http.post('/api/user/recovery', data, options).then(res => {
         recovery.$data.step = 2
-        recovery.$data.qrcode = (res.body.数据.二维码).replace(/&/g, "%26")
+        recovery.$data.qrcode = (res.body.data.qrcode).replace(/&/g, "%26")
         console.log(recovery.$data.qrcode)
       },res=>{
-        modal.$data.showModal('无法完成操作', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+        modal.$data.showModal('无法完成操作', '因为 ' + res.body.description + '（代码：' + res.body.code + '）')
       })
     },
     submitstep2(){
@@ -27,14 +27,14 @@ var recovery = new Vue({
         "Content-Type": "application/json"
       }
       var data = {
-        用户名: recovery.$data.username,
-        恢复密钥: recovery.$data.code,
-        动态验证码: recovery.$data.authcode
+        username: recovery.$data.username,
+        recovery: recovery.$data.code,
+        code: recovery.$data.authcode
       }
       recovery.$http.post('/api/user/confirmtoken', data, options).then(res => {
         window.location = '/home'
       },res=>{
-        modal.$data.showModal('无法完成操作', '因为 ' + res.body.错误描述 + '（代码：' + res.body.错误码 + '）')
+        modal.$data.showModal('无法完成操作', '因为 ' + res.body.description + '（代码：' + res.body.code + '）')
       })
     }
   }
