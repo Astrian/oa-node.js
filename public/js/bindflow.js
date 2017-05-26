@@ -24,10 +24,32 @@ var bind = new Vue({
       }])
     },
     defaultRoute:{
-      judge:"default",
+      judge:"other",
       flow:null
     },
-    defaultSwitch:false
+    defaultSwitch:false,
+    submit(){
+      
+      var flow = bind.$data.routes
+      var defaultRoute = bind.$data.defaultRoute
+      if(bind.$data.defaultSwitch){
+        flow = flow.concat(defaultRoute)
+      }
+      var data = {
+        template: bind.$data.nowtemplateid,
+        routes: flow
+      }
+      var options = {
+        "Content-Type": "application/json"
+      }
+      console.log(data)
+      this.$http.post('/api/project/bind', data, options).then(response => {
+        window.location = '/project/template/detail?tip=template-submit-2&id='+bind.$data.nowtemplateid
+      }, response => {
+        console.log(response)
+        modal.$data.showModal('无法进行绑定操作', '因为 ' + response.body.description + '（代码：' + response.body.code + '）。')
+      });
+    }
   }
 })
 
