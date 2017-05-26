@@ -12,10 +12,12 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
   result = result[0]
   result.flow = JSON.parse(result.flow)
   for(var i in result.flow){
-    SQLStatement = 'SELECT firstname, lastname, node, avatar FROM user WHERE id = '+result.flow[i]
-    result.flow[i] = (yield dbOps(SQLStatement, callback.next))[0]
-    SQLStatement = 'SELECT * FROM node WHERE id = '+result.flow[i].node
-    result.flow[i].node = (yield dbOps(SQLStatement, callback.next))[0]
+    if(result.flow[i]!=-1 && result.flow[i] != -2){
+      SQLStatement = 'SELECT firstname, lastname, node, avatar FROM user WHERE id = '+result.flow[i]
+      result.flow[i] = (yield dbOps(SQLStatement, callback.next))[0]
+      SQLStatement = 'SELECT * FROM node WHERE id = '+result.flow[i].node
+      result.flow[i].node = (yield dbOps(SQLStatement, callback.next))[0]
+    }
   }
   return4Success(result)
 })}

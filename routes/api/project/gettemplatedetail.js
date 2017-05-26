@@ -12,9 +12,9 @@ module.exports = function (req, res, api, reqBody) {cleanCallback(function* (cal
   result = result[0]
   if(result.status != 1){
     SQLStatement = 'SELECT node,status FROM user WHERE id = '+loginUID
-    var loginUserInfo = (yield opsDb(SQLStatement, callbackApi.next))[0]
+    var loginUserInfo = (yield dbOps(SQLStatement, callback.next))[0]
     SQLStatement = 'SELECT ispersonnel FROM node WHERE id = '+loginUserInfo.node
-    var isPersonnel = (yield opsDb(SQLStatement, callbackApi.next))[0].ispersonnel
+    var isPersonnel = (yield dbOps(SQLStatement, callback.next))[0].ispersonnel
     if(!isPersonnel && loginUserInfo.status!=2) return callback4Fail(404,0,'模板不存在，或当前用户无权查看该模板信息。')
   }
   SQLStatement = 'SELECT judge, flow FROM bind WHERE template = '+result.id

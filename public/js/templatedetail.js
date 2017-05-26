@@ -19,6 +19,9 @@ var templatedetail = new Vue({
       },res=>{
         modal.$data.showModal('无法提交专案', '错误是' + res.body.description + '（代码：' + res.body.code + '）')
       })
+    },
+    bind(){
+      window.location = '/project/flow/bind?template='+getUrlParam('id')
     }
   }
 })

@@ -52,6 +52,10 @@ function tip(){
       tip.title = '完成'
       tip.content = '公告已发布。'
       break;
+    case 'flow-submit-1':
+      tip.show = true
+      tip.title = '完成'
+      tip.content = '流程新建完成，可投入使用。'
     default:
   }
 }

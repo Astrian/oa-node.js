@@ -1,0 +1,120 @@
+<html>
+
+<head>
+  <title>专案 · 企业自动化办公系统</title>
+  <!-- 全局、页面 CSS 和 JS -->
+  <link rel="stylesheet" href="/public/css/home.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <!-- Bootstrap -->
+  <script src="/resource/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="/resource/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/resource/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class='flex container'>
+    <div class='webhead' id='user' v-html='userinfo'></div>
+    <div class='main row'>
+      <div class="col-md-3 list-group" id='menu'> <a href="/project" class="list-group-item">专案列表</a> <a href="/project/new" class="list-group-item">新建专案</a> <a href="/project/template" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a> <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a> </div>
+      <div class='col-md-9 columnview' id='bind'>
+        <h2>绑定流程</h2>
+        <div class="form-group columnview">
+          <label for="field-template">选定模板</label>
+          <select id='field-template' class="form-control" v-model='nowtemplateid' v-on:change='getTemplateDetail()'>
+            <option v-for='item in templates' v-bind:value='item.id'>{{item.title}}</option>
+          </select>
+        </div>
+        <label>设定路由并绑定流程</label>
+        <div class="panel panel-default" v-for='(route, index) in routes'>
+          <div class="panel-heading"><strong>第 {{index-1}} 顺位</strong></div>
+          <div class="panel-body columnview">
+            <p><strong>条件</strong></p>
+            <div class="form-group">
+              <select class="form-control" v-model='route.judge.field'>
+                <option v-for='(field,j) in choosenTemplate.sheets' v-bind:value='j'>{{field.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <select class="form-control" v-model='route.judge.condition'>
+                <option value='>' v-if='choosenTemplate.sheets[route.judge.field].type == "number"'>大于</option>
+                <option value='<=' v-if='choosenTemplate.sheets[route.judge.field].type == "number"'>不大于</option>
+                <option value='<' v-if='choosenTemplate.sheets[route.judge.field].type == "number"'>小于</option>
+                <option value='>=' v-if='choosenTemplate.sheets[route.judge.field].type == "number"'>不小于</option>
+                <option value='='>等于</option>
+              </select>
+            </div>
+            <div class='form-group'>
+              <input class="form-control" v-model='route.judge.value'>
+            </div>
+            <p><strong>执行流程</strong></p>
+            <select class="form-control" v-model='route.flow'>
+              <option v-for='(flow,index) in flows' v-value='index'>{{flow.title}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <button class='btn btn-default' v-on:click='addRoute()'>新增一个路由条件</button>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading"><strong>默认路由</strong>&nbsp;&nbsp;<input type="checkbox" v-model='defaultSwitch'>&nbsp;开启</div>
+          <div class="panel-body columnview" v-if='!defaultSwitch'>
+            <p>请先开启默认路由。</p>
+          </div>
+          <div class="panel-body columnview" v-else>
+            <p><strong>条件</strong></p>
+            <p>不符合上述所有路由顺位的条件时</p>
+            <p><strong>执行流程</strong></p>
+            <select class="form-control" v-model='defaultRoute.flow'>
+              <option v-for='(flow,index) in flows' v-value='index'>{{flow.title}}</option>
+              
+            </select>
+          </div>
+        </div>
+        <div class="columnview">
+          <div>
+          <button class='btn btn-primary'>绑定</button>
+          </div>
+          <p class="help-block">若以往该专案已绑定流程，则新绑定关系将会完全替换原有绑定关系。</p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{modalTitle}}</h4> </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">好</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</body>
+<!-- moment -->
+<script src="/resource/moment/min/moment-with-locales.min.js"></script>
+<!-- Vue JS -->
+<script src="/resource/vue/dist/vue.js"></script>
+<script src="/resource/vue-resource/dist/vue-resource.min.js"></script>
+<!-- 模态通知框 -->
+<script src='/public/js/modal.js'></script>
+<!-- 获取用户数据 -->
+<script src="/public/js/userinfo.js"></script>
+<!-- 绑定专案 -->
+<script src="/public/js/bindflow.js"></script>
+<!-- 提示框 -->
+<script src="/public/js/tips.js"></script>
+<!-- 菜单 -->
+<script src="/public/js/menu.js"></script>
+
+</html>

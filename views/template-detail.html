@@ -31,7 +31,7 @@
             <span v-if='template.status == 1' class="label label-success">上线</span>
             <span v-if='template.status == -1' class="label label-default">已归档</span>
             <span class='small'>创建于 {{template.createat}}</span></h3>
-          <p>{{template.描述}}</p>
+          <p>{{template.description}}</p>
           <h3>模板字段</h3>
           <table class="table">
           <thead>
@@ -54,7 +54,7 @@
           </tbody>
         </table>
         <h3>绑定的流程</h3>
-        <div v-if='template.flow' class='columnview'>
+        <div v-if='template.flow.length != 0' class='columnview'>
           <div class="panel panel-default" v-for='(item, index) in template.flow'>
             <div class="panel-heading">
               <strong>
@@ -111,7 +111,7 @@
                     </div>
                     <div class='columnview'>
                       <div class='flow-username'>{{people.firstname}}{{people.lastname}}</div>
-                      <div class='flow-second'>第 {{j+1}} 步</div>
+                      <div class='flow-second'>第 {{j+1}} 步&nbsp;&middot;&nbsp;{{people.node}}</div>
                     </div>
                   </div>
                   </div>
@@ -121,12 +121,11 @@
             </div>
             </div>
           </div>
-
-        <div v-else>该模板暂未绑定任何流程。</div>
-          <div v-if='template.status == 0  && (user.node.ispersonnel == 1 || user.status == 2)' class='columnview'>
+          <div v-else>该模板暂未绑定任何流程。</div>
+          <div v-if='template.status == 0' class='columnview'>
             <h3>操作该模板</h3>
             <div><button class="btn btn-primary" v-on:click='submit()'>发布</button>
-            <button class="btn btn-default">归档</button></div>
+            <button class="btn btn-default" v-on:click='bind()'>绑定流程</button></div>
           </div>
         </div>
       </div>

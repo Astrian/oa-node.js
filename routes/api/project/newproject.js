@@ -33,7 +33,7 @@ module.exports = function (req, res, api, reqBody) {cleanCallback (function *(ca
         if(!typeJudger.isString(data[i])) return4Fail(400,1,'第 '+((+i)+1)+ ' 位数据应该是一个文本，但它是一个数字。')
         break
       case 'number':
-        if(!typeJudger.isNumber(data[i])) return4Fail(400,1,'第 '+((+i)+1)+ ' 位数据应该是一个文本，但它是一个数字。')
+        if(!typeJudger.isNumber(+data[i])) return4Fail(400,1,'第 '+((+i)+1)+ ' 位数据应该是一个文本，但它是一个数字。')
     }
   }
   SQLStatement = "INSERT INTO project (applyer, submittime, template, data, status, priority) VALUES ('"+loginUID+"', '"+new Date().getTime()+"','"+reqBody.template+"','"+JSON.stringify(reqBody.data)+"', -1, "+reqBody.priority+")"

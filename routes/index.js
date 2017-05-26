@@ -86,4 +86,12 @@ router.get('/project/flow/detail', function(req, res, next) {
   if (req.session.user != null) res.render('flowdetail');
   else res.redirect('/')
 });
+router.get('/project/flow/new', function(req, res, next) {
+  if (req.session.user != null) res.render('flow-new');
+  else res.redirect('/')
+});
+router.get('/project/flow/bind', function(req, res, next) {
+  if (req.session.user != null) res.render('bindflow');
+  else res.redirect('/')
+});
 module.exports = router;

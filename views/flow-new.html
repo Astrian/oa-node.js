@@ -13,7 +13,8 @@
 
 <body>
   <div class='flex container'>
-    <div class='webhead' id='user' v-html='userinfo'></div>
+    <div class='webhead' id='user' v-html='userinfo'>
+    </div>
     <div class='main row'>
       <div class="col-md-3 list-group" id='menu'>
         <a href="/project" class="list-group-item">专案列表</a>
@@ -21,45 +22,44 @@
         <a href="/project/template" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>模板</a>
         <a href="/project/flow" class="list-group-item" v-if='(user.node.ispersonnel) || (user.status == 2)'>流程</a>
       </div>
-      <div class='col-md-9 columnview' id='flowdetail'>
-        <h2>{{flow.title}}
-          <span class="label label-success" v-if='flow.status == 1'>正在运行</span>
-          <span class="label label-default" v-else>已被弃用</span>
-        </h2>
-        {{flow.description}}
-        <div v-for='(people, j) in flow.flow' class='flowstep'>
-          <div v-if='people == -1'>
-            <div>
-              <image src='/public/images/default-avatar.jpg' class='avatar-medium img-circle'></image>
-            </div>
-            <div class='columnview'>
-              <div class='flow-username'>申请人的部门经理</div>
-              <div class='flow-second'>第 {{j+1}} 步</div>
-            </div>
+      <div class='col-md-9 columnview' id='newflow'>
+        <h2>新建流程</h2>
+        <div class="form-group columnview">
+          <label for="field-name">流程识别名</label>
+          <input class="form-control" id="field-name" v-model='flow.title'>
+          <p class="help-block">为这个流程起一个易于识别的名称</p>
+        </div>
+        <div class="form-group columnview">
+          <label for="field-description">流程描述</label>
+          <textarea class="form-control" id="field-description" v-model='flow.description'></textarea>
+          <p class="help-block">描述这个流程的具体作用</p>
+        </div>
+        <label>流程步骤</label>
+        <div v-for='(item,index) in flow.flow' class='columnview'>
+          <div class="alert alert-warning columnview" role="alert" v-if='index == 9'><p><strong>真的需要那么长的流程吗？</strong></p><p>这个流程已经超过 10 个步骤了！过长的流程对企业的效率提升不利，建议考虑精简此流程。</p></div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <strong>第 {{index+1}} 步</strong>
           </div>
-          <div v-else-if='people == -2'>
-            <div>
-              <image src='/public/images/default-avatar.jpg' class='avatar-medium img-circle'></image>
-            </div>
-            <div class='columnview'>
-              <div class='flow-username'>由上一步决定此步骤负责人</div>
-              <div class='flow-second'>第 {{j+1}} 步</div>
-            </div>
+          <div class="panel-body">
+            <select class="form-control" v-model='flow.flow[index]'>
+              <option v-bind:value='-1' v-if='index == 0'>专案申请人所在部门的经理</option>
+              <option v-bind:value='-2' v-if='index != 0'>当上步负责人选择通过时，由其决定此步骤</option>
+              <option v-for='user in users' v-bind:value='user.id'>{{user.firstname}}{{user.lastname}}</option>
+            </select>
           </div>
-          <div v-else>
-            <div>
-              <image v-bind:src='people.avatar' class='avatar-medium img-circle'></image>
-            </div>
-            <div class='columnview'>
-              <div class='flow-username'>{{people.firstname}}{{people.lastname}}</div>
-              <div class='flow-second'>第 {{j+1}} 步&nbsp;&middot;&nbsp;{{people.node.name}}</div>
-            </div>
+          <div class="panel-footer"><button class="btn btn-default btn-sm" v-on:click='deleteFlowStep(index)'>删除此步骤</button></div>
+        </div>
+      </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <button class="btn btn-default" onclick='addFlowStep()'>新增一个流程步骤</button>
           </div>
-          </div>
+        </div>
+        <btn class="btn btn-primary" v-on:click='submit'>提交</btn>
       </div>
     </div>
   </div>
-          </div>
   <div class="modal fade" tabindex="-1" role="dialog" id='modal'>
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -87,10 +87,10 @@
 <script src='/public/js/modal.js'></script>
 <!-- 获取用户数据 -->
 <script src="/public/js/userinfo.js"></script>
-<!-- 获取流程详情 -->
-<script src="/public/js/flowdetail.js"></script>
 <!-- 提示框 -->
 <script src="/public/js/tips.js"></script>
+<!-- 新流程 -->
+<script src="/public/js/newflow.js"></script>
 <!-- 菜单 -->
 <script src="/public/js/menu.js"></script>
 </html>
